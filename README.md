@@ -17,7 +17,7 @@ sudo chmod +x mm_pkginst.sh mmpkginst.desktop mm_pkginst_files/*
 
 or
 
-## `grep '^Exec' mmpkginst.desktop | tail -1 | sed 's/^Exec=//' | sed 's/%.//' | sed 's/^"//g' | sed 's/" *$//g'`
+``grep '^Exec' mmpkginst.desktop | tail -1 | sed 's/^Exec=//' | sed 's/%.//' | sed 's/^"//g' | sed 's/" *$//g'``
 
 or
 
