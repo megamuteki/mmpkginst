@@ -1,11 +1,15 @@
-# This is desktop afater installer.
-You can use after install Linux MINT XFCE or Linux KDE Neon (User Edition)
+# penmap
+This is pentablet mapping script for multi monitor.
 
-### How To use ###
-git clone 
+You can save six petablet and monitor combinations.
 
+# Install
+./INSTALL.sh
 
+# Uninstall
+./UNINSTALL
 
-updated.
+# Sample picture
+memo:Select from PEN List and Monitor List. 
+![Penmap](https://github.com/megamuteki/images/blob/master/penmap/penmap01.png)
 
-#### Installing from source manually ####
