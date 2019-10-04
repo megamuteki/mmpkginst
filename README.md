@@ -11,5 +11,5 @@ You can save six petablet and monitor combinations.
 
 # Sample picture
 memo:Select from PEN List and Monitor List. 
-![Penmap](https://github.com/megamuteki/images/blob/master/penmap/penmap01.png)
+![Penmap](https://github.com/megamuteki/images/blob/master/mmpkginst/mmpkginst01.png)
 
