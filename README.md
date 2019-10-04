@@ -1,4 +1,4 @@
-# penmap
+### mmpkginst
 This is pentablet mapping script for multi monitor.
 
 You can save six petablet and monitor combinations.
