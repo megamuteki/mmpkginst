@@ -1,0 +1,44 @@
+#!/bin/bash
+
+ppa="ppa:gezakovacs/ppa"
+pkgs="unetbootin extlinux unetbootin-translations"
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+
+
+# Install Check
+if [ "$1" == "-c" ] ; then
+	if [ $(_check ${pkgs}) == "n" ] ; then
+		echo FALSE
+	else
+		echo TRUE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+    if [ ppa == "" ] ; then
+         echo "PPAは、使用されていません。"
+	else
+		echo "PPAを登録します。"
+		_ppainstall ${ppa}
+    fi    
+
+	_install ${pkgs}
+	cp /usr/share/applications/unetbootin.desktop $(_desktop)/unetbootin.desktop
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+    if [$ppa == "" ] ; then
+         echo "PPAは、使用されていません。"
+	else
+		echo "PPAを削除します。"
+		_ppapurge ${ppa}
+    fi    
+	_purge ${pkgs}
+
+	rm -f $(_desktop)/unetbootin.desktop
+
+fi

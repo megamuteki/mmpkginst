@@ -1,0 +1,37 @@
+#!/bin/bash
+
+pkgs="skype v4l2ucp v4l-utils cheese libwebcam0 ir-keytable"
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+
+# Check
+if [ "$1" == "-c" ] ; then
+	pkgs="skype v4l2ucp v4l-utils libwebcam0 ir-keytable"
+	if [ $(_check ${pkgs}) == "n" ] ; then
+		echo FALSE
+	else
+		echo TRUE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+	_install ${pkgs}
+	cp /usr/share/applications/cheese.desktop $(_desktop)/cheese.desktop
+	cp /usr/share/applications/skype.desktop  $(_desktop)/skype.desktop
+	
+	sudo sh -c "echo '#!/bin/bash' > /usr/local/bin/skype"
+	sudo sh -c "echo 'LD_PRELOAD=/usr/lib/i386-linux-gnu/libv4l/v4l2convert.so /usr/bin/skype' >> /usr/local/bin/skype"
+	
+	sudo chmod +x /usr/local/bin/skype
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+	_purge ${pkgs}
+	
+	rm -f $(_desktop)/cheese.desktop
+	rm -f $(_desktop)/skype.desktop
+	
+	sudo rm -f /usr/local/bin/skype
+fi
