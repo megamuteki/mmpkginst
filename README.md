@@ -1,5 +1,5 @@
 # mmpkginst
-This is after desktop installer.
+This is a after desktop installer.
 
 This installer is applied to Linux mint or Linux KDE NEON
 
