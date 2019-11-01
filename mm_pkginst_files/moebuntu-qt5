@@ -20,6 +20,20 @@ if [ "$1" == "-c" ] ; then
 # Install
 elif [ "$1" == "-i" ] ; then
 
+#	#qt5-ctのインストール確認
+#	if [ $(dpkg-query -W -f='${Status}' qt5-ct  2>/dev/null | grep -c "ok installed") -eq 1 ];
+#	then
+#		echo "qt5-ctは、インストールされています。"
+#
+#	else
+#		echo "qt5-ctを、インストールします"
+#		sudo apt install qt5-ct -y
+#		_log "qt5-ctのインストールに成功しました。"
+#	fi
+#
+
+
+
 	#qt5-style-pluginsのインストール確認
 	if [ $(dpkg-query -W -f='${Status}' qt5-style-plugins  2>/dev/null | grep -c "ok installed") -eq 1 ];
 	then
@@ -31,6 +45,9 @@ elif [ "$1" == "-i" ] ; then
 		_log "qt5-style-pluginsのインストールに成功しました。"
 	fi
 	echo "export QT_QPA_PLATFORMTHEME=gtk2" >> ~/.profile 
+
+#       echo 'export QT_QPA_PLATFORMTHEME="qt5ct"' >> ~/.profile 
+
 
 	_log "Qt5アプリの萌え化に成功しました。"
 
