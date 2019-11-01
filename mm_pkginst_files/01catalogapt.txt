@@ -1,0 +1,14 @@
+GIMPペイント画像処理アプリ
+BOTH
+APT
+PhotoShopライクなペイント画像処理アプリ。
+gimpapt
+---
+Kritaペイントアプリ
+BOTH
+APT
+ClipStudioライクなペイント画像処理アプリ。
+kritaapt
+---
+
+

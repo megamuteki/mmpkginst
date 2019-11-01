@@ -1,0 +1,47 @@
+#!/bin/bash
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+
+ppa="dummy"
+pkgs="openboard"
+
+# Check
+if [ "$1" == "-c" ] ; then
+	if [ $(_check ${pkgs}) == "y" ]  &&  [ $(_ppacheck ${ppa}) == "n" ] ; then
+		echo TRUE
+	else	
+		echo FALSE 
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+	echo "OpenBoardをダウンロードしています。"
+	cd /tmp
+	deb="openboard_ubuntu_18.04_1.5.3_amd64.deb"
+	
+
+	_log "https://github.com/OpenBoard-org/OpenBoard/releases/download/v1.5.3-ubuntu18/${deb}"
+	if wget -c https://github.com/OpenBoard-org/OpenBoard/releases/download/v1.5.3-ubuntu18/${deb} ; then
+		_log "openboardのダウンロードに成功しました。"
+	else
+		_err "openboardのダウンロードに失敗しました。"
+		return 1
+	fi
+	
+	if sudo dpkg -i ${deb} ; then
+		_log "Oepenboardのインストールに成功しました。"
+	else
+		_err "OpenBoardのインストールに失敗しました。"
+		return 1
+	fi
+		
+	_log "一時ファイルを除去しています..."
+	rm -f ${deb}
+
+# Purge
+elif [ "$1" == "-p" ] ; then
+	_purge ${pkgs}
+
+fi

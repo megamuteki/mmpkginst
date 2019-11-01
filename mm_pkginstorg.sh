@@ -27,40 +27,14 @@ then
 	filemanapp="thunar"
 
 else
-	echo "thunar ファイルマネージャーをインストールします。"
-	sudo apt insatall thunar -y
-
+	echo "thunar ファイルマネージャーをインストールしてください。"
 fi
 
 
 ######################################################
 #   リストモードの選択とリストの作成
 #######################################################
-
-_genpkglist()
-{
 datadir=$(cd $(dirname "$0") && pwd)/mm_pkginst_files
-
-#Cancelした時の一時ファイルを削除
-file_before="/tmp/_pkginstall_before"
-file_after="/tmp/_pkginstall_after"
-file_dislplay="/tmp/_pkginstall_display"
-
-
-if [ -e $file_before ]; then
-    rm -f $file_before
-fi
-
-if [ -e $file_after ]; then
-    rm -f $file_after
-fi
-
-if [ -e $file_display ]; then
-    rm -f $file_display
-fi
-
-
-
 
 listflag=$(yad \
 --title="mm-pkginstaller" \
@@ -74,8 +48,8 @@ listflag=$(yad \
 --form  \
 --field="\
 Linux Mint 19.2 XFCE 及び　KDE Neon 2019 UserEditionをを利用する方向けになります。\n\
-主にXP-PENペンタブを利用してイラスト、漫画、絵本、動画などの制作に役立つ\n\
-アプリケーションをインストールするスクリプトになります。\n\
+主にXP-PENペンタブを利用する方の描画、動画制作、漫画絵本などを\n\
+作成するソフトが中心になります。\n\
 Linux Bean インストーラスクリプトを利用しています。\n\
 　　　":LBL 'bash -c ""' \
 --field="\
@@ -122,29 +96,29 @@ listflag=$(echo $listflag  | sed -e 's/[^0-9]//g')
 case  $listflag in
  
      21)
-		cat   $datadir/01catalogapt.txt >  $datadir/00pkgcatalog.txt
+		cat   $datadir/01aptcatalog.txt >  $datadir/00pkgcatalog.txt
 		
          ;;
 
      22) 
           
-		cat  $datadir/01catalogppa.txt > $datadir/00pkgcatalog.txt
+		cat  $datadir/01ppacatalog.txt > $datadir/00pkgcatalog.txt
 		
 		;;
                  
      23) 
           
-		cat  $datadir/01catalogpen.txt > $datadir/00pkgcatalog.txt
+		cat  $datadir/01pencatalog.txt > $datadir/00pkgcatalog.txt
 		
 		;;
      24) 
           
-		cat  $datadir/01catalogmoe.txt > $datadir/00pkgcatalog.txt
+		cat  $datadir/01moecatalog.txt > $datadir/00pkgcatalog.txt
 		
 		;;
      25) 
           
-		cat  $datadir/01catalogutil.txt > $datadir/00pkgcatalog.txt
+		cat  $datadir/01utilcatalog.txt > $datadir/00pkgcatalog.txt
 		
 		;;
 
@@ -155,29 +129,21 @@ case  $listflag in
 esac         
 
 
-
-}
-
-
 ######################################################
 #   変数の準備
 #######################################################
 
-_prepvar()
-{
 #Pkgリストに変換するテキストファイルの場所とファイル名
 #datadir=$(cd $(dirname "$0") && pwd)/mm_pkginst_files
 catalog=$(cat ${datadir}/00pkgcatalog.txt)
 
 #解説文
 infotxt=${datadir}/00infotxt.txt
-
-#catalogファイル
-catalogppa=${datadir}/01catalogppa.txt
-catalogapt=${datadir}/01catalogapt.txt
-catalogpen=${datadir}/01catalogpen.txt
-catalogmoe=${datadir}/01catalogmoe.txt
-catalogutil=${datadir}/01catalogutil.txt
+ppacatalog=${datadir}/01ppacatalog.txt
+aptcatalog=${datadir}/01aptcatalog.txt
+pencatalog=${datadir}/01pencatalog.txt
+moecatalog=${datadir}/01moecatalog.txt
+utilcatalog=${datadir}/01utilcatalog.txt
 
 
 # 共通関数の読み込み
@@ -195,14 +161,10 @@ before=""
 # 改行
 BR="
 "
-}
 
 #######################################################
 #  テキストファイルをリスト形式に変換
 #######################################################
-
-_makelist()
-{
 
 
 _txt2list()
@@ -253,7 +215,6 @@ _txt2list()
 
 
 
-
 _txt2list | \
 yad --progress --title="起動中" --on-top --center --window-icon=checkbox --image=checkbox \
 --text "インストール状態を確認しています..." --pulsate --auto-close
@@ -277,14 +238,11 @@ before=$(cat  "/tmp/_pkginstall_before")
 rm -f "/tmp/_pkginstall_display"
 rm -f "/tmp/_pkginstall_before"
 
-}
+
 #######################################################
 #  リストから変更したい項目を選択
 #######################################################
 # リストを表示
-
-_dispList()
-{
 ipcrm --all=shm
 fkey=$(($RANDOM * $$))
 
@@ -302,42 +260,16 @@ after=$(
 	yad --key="$fkey" \
 	--width="640" --height="480" --on-top --center --wrap-width=600 \
 	--title="追加パッケージ設定ウィザード" --window-icon=checkbox \
-	--notebook --tab="パッケージ" --tab="情報" \
-	--button="gtk-quit:100" \
-    --button="gtk-cancel:200" \
-    --button="gtk-ok:0" 
-
+	--notebook --tab="パッケージ" --tab="情報"
+	--button=gtk-quit:1
+    --button=gtk-cancel:2
+    --button=gtk-ok:3
 )
 
-
-}
-
-
-#リストを作成する
-_listing()
-{
-_genpkglist
-_prepvar
-_makelist
-_dispList
-}
-
-genflag=200
-
-while  [ $genflag -eq  "200" ] 
-do
-
-_listing
-
- genflag=$?
-
-done
-   
-# QUITした場合は終了
-if [ $genflag -eq 100 ] ; then
+# キャンセルした場合は終了
+if [ $? -gt 0 ] ; then
 	exit 1
 fi
-
 
 #######################################################
 #  変更箇所の検出・パース

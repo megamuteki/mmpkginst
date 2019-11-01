@@ -43,6 +43,51 @@ _postreg()
 	echo "$@" >> $(_postfile)
 }
 
+
+_ppacheck()
+{
+
+	local ppa_added
+
+#	echo -----
+#	echo PPA $@ の登録を確認します。
+#	echo
+#	echo $@
+#	echo 確認
+
+
+#	grep ^ /etc/apt/sources.list /etc/apt/sources.list.d/* | grep $ppa
+#	ppa_added=`grep ^ /etc/apt/sources.list /etc/apt/sources.list.d/* | grep -v list.save | grep -v deb-src | grep deb | grep $@  | wc -l`
+
+	ppa_added=$(grep ^ /etc/apt/sources.list /etc/apt/sources.list.d/* | grep -v list.save | grep -v deb-src | grep deb | grep $@  | wc -l)
+
+	if [ $ppa_added -lt 1 ]; then
+			echo n
+			
+	else
+			echo y
+	fi
+
+}
+
+_aptcheck()
+{
+	local i
+	local pkgs
+	
+	pkgs=$(dpkg -l | grep -v ^rc | awk '{print $2}' | cut -d: -f1)
+
+	# 一つでもインストールされていない場合はnを返す
+	for i in $@ ; do
+		if [ $(dpkg-query -W -f='${Status}' ${pkgs}  2>/dev/null | grep -c "ok installed") -lt 1 ]; then
+			echo n
+			return 0
+		fi
+	done
+	echo y
+
+}
+
 _check()
 {
 	local i
@@ -135,14 +180,16 @@ _ppainstall()
 	echo $@
 	echo 確認
 	
-	if sudo add-apt-repository  $@ ; then
+	if sudo add-apt-repository  "ppa:${@}" ; then
 		_log "$@ の登録に成功しました。"
 	else
 		_err "$@ の登録に失敗しました。"
 		exit 1
 	fi
 
-	sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com `sudo apt update 2>&1 | grep -o '[0-9A-Z]\{16\}$' | xargs`
+#	sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com `sudo apt update 2>&1 | grep -o '[0-9A-Z]\{16\}$' | xargs`
+	
+	sudo apt update
 
 	echo
 	return 0
@@ -177,7 +224,7 @@ _ppapurge()
 	echo $@
 	echo 確認
 	
-	if sudo add-apt-repository --remove $@ ; then
+	if sudo add-apt-repository --remove  "ppa:${@}" ; then
 		_log "$@ の削除に成功しました。"
 	else
 		_err "$@ の削除に失敗しました。"
@@ -187,8 +234,6 @@ _ppapurge()
 	echo
 	return 0
 }
-
-
 
 
 

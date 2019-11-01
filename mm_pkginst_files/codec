@@ -1,0 +1,164 @@
+#!/bin/bash
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+
+pkgs="rar unrar unar  libdvd-pkg libbluray2 libaacs0 libavcodec-extra libavfilter-extra6   libbdplus0  gstreamer1.0-plugins-bad gstreamer1.0-tools gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-packagekit  lame flac wavpack"
+
+# Check
+if [ "$1" == "-c" ] ; then
+	if [ $(_check ${pkgs}) == "n" ] ; then
+		echo FALSE
+	else
+		if [ -f "${datadir}/w32.txt" ] || [ $(_check neroaaccodec) == "y" ] ; then
+			echo TRUE
+		else
+			echo FALSE
+		fi
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+	_install ${pkgs}
+	
+	sudo echo "LibCss を有効化します..."
+	if sudo  dpkg-reconfigure  libdvd-pkg ; then
+		_log "LibCss の有効化に成功しました。"
+	else
+		_err "LibCss の有効化に失敗しました。"
+	fi
+	
+	_win32codecs()
+	{
+		echo "最新の Win32 コーデックをダウンロードしています..."
+		cd /tmp
+		
+		deb="w32codecs_20110131-dmo2_i386.deb"
+		
+
+
+		_log "http://www.deb-multimedia.org/pool/non-free/w/w32codecs/${deb}"
+		if wget -c http://www.deb-multimedia.org/pool/non-free/w/w32codecs/${deb} ; then
+			_log "Win32 コーデックのダウンロードに成功しました。"
+		else
+			_err "Win32 コーデックのダウンロードに失敗しました。"
+			return 1
+		fi
+		
+		if sudo dpkg -i ${deb} ; then
+			_log "Win32 コーデックのインストールに成功しました。"
+		else
+			_err "Win32 コーデックのインストールに失敗しました。"
+			return 1
+		fi
+		
+		_log "一時ファイルを除去しています..."
+		rm -f ${deb}
+		
+		return 0
+	}
+	_win32codecs
+	
+	_neroaac()
+	{
+		echo "Nero AAC Encoder をダウンロードしています..."
+		cd /tmp
+		mkdir -p /tmp/neroaaccodec_1.5.4_i386
+		mkdir -p /tmp/neroaaccodec_1.5.4_i386/DEBIAN
+		mkdir -p /tmp/neroaaccodec_1.5.4_i386/usr/bin
+		
+		_log "https://www.videohelp.com/download/NeroAACCodec-1.5.4.zip"
+		if wget --referer https://www.videohelp.com/download/NeroAACCodec-1.5.4.zip https://www.videohelp.com/download/NeroAACCodec-1.5.4.zip ; then
+			_log "Nero AAC のダウンロードに成功しました。"
+		else
+			_err "Nero AAC のダウンロードに失敗しました。"
+			return 1
+		fi
+		
+		echo "ダウンロードしたアーカイブを解凍しています..."
+		mkdir -p NeroAACCodec-1.5.4
+		if unzip NeroAACCodec-1.5.4.zip -d NeroAACCodec-1.5.4 ; then
+			_log "アーカイブの解凍に成功しました。"
+		else
+			_err "アーカイブの解凍に失敗しました。"
+			return 1
+		fi
+		
+		echo "実行ファイルをパッケージにまとめています..."
+		cd NeroAACCodec-1.5.4/linux
+		if sudo cp -v ./* /tmp/neroaaccodec_1.5.4_i386/usr/bin ; then
+			_log "実行ファイルの移動に成功しました。"
+		else
+			_err "実行ファイルの移動に失敗しました。"
+			return 1
+		fi
+		if sudo chmod +x /tmp/neroaaccodec_1.5.4_i386/usr/bin/* ; then
+			_log "実行ファイルの権限付与に成功しました。"
+		else
+			_err "実行ファイルの権限付与に失敗しました。"
+			return 1
+		fi
+		
+		echo "Package: neroaaccodec
+Version: 1.5.4
+Architecture: i386
+Maintainer: Hoge Fuga <hoge@fugafuga.hoge>
+Installed-Size: $(du -c /tmp/neroaaccodec_1.5.4_i386/usr | tail -n 1 | awk '{print $1}')
+Depends: 
+Section: sound
+Priority: optional
+Description: Nero AAC Codec
+" > /tmp/neroaaccodec_1.5.4_i386/DEBIAN/control
+		
+		cd /tmp
+		if dpkg -b neroaaccodec_1.5.4_i386 ; then
+			_log "パッケージ化に成功しました。"
+		else
+			_err "パッケージ化に失敗しました。"
+			return 1
+		fi
+		
+		if sudo dpkg -i neroaaccodec_1.5.4_i386.deb ; then
+			_log "インストールに成功しました。"
+		else
+			_err "インストールに失敗しました。"
+			return 1
+		fi
+		
+		_log "一時ファイルを除去しています..."
+		cd /tmp
+		rm -rf neroaaccodec_1.5.4_i386
+		rm -f  neroaaccodec_1.5.4_i386.deb
+		rm -rf NeroAACCodec-1.5.4
+		rm -f  NeroAACCodec-1.5.4.zip
+	}
+	_neroaac
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+	
+	if [ $(_check w32codecs) == "y" ] ; then
+		pkgs="${pkgs} w32codecs"
+	else
+		if sudo bash -c "cat ${datadir}/w32.txt | xargs rm -f" ; then
+			_log "Win32 コーデックの除去に成功しました。"
+			sudo rm -f ${datadir}/w32.txt
+		else
+			_err "Win32 コーデックの除去に失敗しました。"
+		fi
+	fi
+	
+	if [ $(_check neroaaccodec) == "y" ] ; then
+		pkgs="${pkgs} neroaaccodec"
+	else
+		if sudo rm -f /usr/local/bin/neroAacDec /usr/local/bin/neroAacEnc /usr/local/bin/neroAacTag ; then
+			_log "Nero AAC の除去に成功しました。"
+		else
+			_err "Nero AAC の除去に失敗しました。"
+		fi
+
+	fi
+	
+	_purge ${pkgs}
+fi

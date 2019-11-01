@@ -1,0 +1,84 @@
+#!/bin/bash
+
+ppa="dummy"
+pkgs="dummy"
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+	
+# Check
+if [ "$1" == "-c" ] ; then
+	if [ $(ls $HOME | grep ArtOfIllusion | wc -l ) -lt 1 ] ; then
+		echo FALSE
+	else
+		echo TRUE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+	if sudo update-java-alternatives --jre-headless --jre --set java-1.8.0-openjdk-amd64 ; then
+		_log "openjdk-8-jdkを適用しました。"
+	else
+		_err "openjdk-8-jdkがありません。先にインストールして適用しておいてください。"
+		 exit
+	fi
+		
+	
+	echo "ArtOfIllusionをダウンロードします。"
+	cd /tmp
+	
+	_log "wget https://github.com/ArtOfIllusion/ArtOfIllusion/releases/download/3.1.0/ArtOfIllusion.3.1.0-Linux.zip"
+	if wget "https://github.com/ArtOfIllusion/ArtOfIllusion/releases/download/3.1.0/ArtOfIllusion.3.1.0-Linux.zip" ; then
+		_log "ArtOfIllusionのダウンロードに成功しました。"
+	else
+		_err "ArtOfIllusionのダウンロードに失敗しました。"
+			exit
+	fi
+	
+	if unzip -q  /tmp/ArtOfIllusion.3.1.0-Linux.zip  -d/tmp/ArtOfIllusion ; then
+		_log "アーカイブの解凍に成功しました。"
+		else
+		_err "アーカイブの解凍に失敗しました。"
+			exit
+	fi	
+	
+	
+	
+	if  java -jar /tmp/ArtOfIllusion/aoi-linux-install.jar ; then
+		_log "ArtOfIllusionのインストールに成功しました。"
+		
+	else
+		_err "ArtOfIllusionのインストールに失敗しました。"
+			exit
+	fi
+		rm -rf "/tmp/ArtOfIllusion/"
+		rm -f "/tmp/ArtOfIllusion.3.1.0-Linux.zip"
+
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+
+    _uninstja()
+    {
+	java -jar $HOME/ArtOfIllusion/Uninstaller/uninstaller.jar
+    
+    }
+    
+
+    _uninstja  
+    
+#    pid=$(pgrep -u $(whoami) java -o)
+   
+    tail -f /dev/null --pid=$(pgrep -u $(whoami) java -o); echo "アンインストールが終了しました"
+    
+    
+	if [ $(ls $HOME | grep ArtOfIllusion | wc -l ) -lt 1 ] ; then
+		_log "ArtOfIllusionのアンインストールに成功しました。"
+	else
+		_err "ArtOfIllusionのアンインストールに失敗したかフォルダが残ったかもしれませせん。"
+	fi
+fi

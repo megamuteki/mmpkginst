@@ -1,0 +1,39 @@
+#!/bin/bash
+
+ppa="thomas-schiex/blender"
+pkgs="blender"
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+
+# Check
+
+if [ "$1" == "-c" ] ; then
+	if [ $(_check ${pkgs}) == "n" ] ; then
+		echo FALSE
+	else
+		echo TRUE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+	echo "PPAを登録します。"
+	_ppainstall ${ppa}  
+
+	_install ${pkgs}
+
+	cp /usr/share/applications/blender.desktop $(_desktop)/blender.desktop
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+	echo "PPAを削除します。"
+	_ppapurge ${ppa}
+
+	_purge ${pkgs}
+	rm -f $(_desktop)/blender.desktop
+
+fi
