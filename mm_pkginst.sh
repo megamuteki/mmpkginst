@@ -18,7 +18,7 @@ then
 
 else
 	echo "leafpad  エディタをインストールします。"
-	sudo apt insatall leafpad -y
+	sudo apt install leafpad -y
 fi
 
 #ファイルマネージャの設定
@@ -28,9 +28,47 @@ then
 
 else
 	echo "thunar ファイルマネージャーをインストールします。"
-	sudo apt insatall thunar -y
+	sudo apt install thunar -y
 
 fi
+
+
+#yadの設定
+if [ $(dpkg-query -W -f='${Status}' yad  2>/dev/null | grep -c "ok installed") -eq 1 ];
+then
+	yadapp="yad"
+
+else
+	echo "yadをインストールします。"
+	sudo apt install yad -y
+
+fi
+
+
+#gitの設定
+if [ $(dpkg-query -W -f='${Status}' git  2>/dev/null | grep -c "ok installed") -eq 1 ];
+then
+	gitapp="git"
+
+else
+	echo "gitをインストールします。"
+	sudo apt install git -y
+
+fi
+
+
+#基本開発環境の設定
+if [ $(dpkg-query -W -f='${Status}' build-essential 2>/dev/null | grep -c "ok installed") -eq 1 ];
+then
+	build-essentialapp="build-essential"
+
+else
+	echo "build-essentialをインストールします。"
+	sudo apt install build-essential -y
+
+fi
+
+
 
 
 ######################################################
@@ -88,29 +126,26 @@ Linux Bean インストーラスクリプトを利用しています。\n\
 --field="\
 標準リポジトリ以外からのアプリをインストールします。\n\
 Linux経験者又は近くにサポートしてくれる人が存在する人向けになります。\n\
-開発チームの最新版などは比較的安心して使用できると思われます。\n\
+開発チームのPPA最新版などは比較的安心して使用できると思われます。\n\
 ソースコードからコンパイルするものもあります。\n\
-以下の区分を説明文に付加してあります。\n\
-◎：比較的安安心してしようできると思われるもの\n\
-△：サポートの継続や不安定になったりする可能性があると思われるもの\n\
 　　":LBL 'bash -c ""' \
 --field="---ペンタブツール---（PentabTools）":FBTN 'bash -c " echo 23 ; kill -USR1 $YAD_PID"' \
 --field="\
 ペンタブ関連のツール類になります。\n\
 XP-PEN製品のペンタブレットが基本になっています。\n\
 ペンタブレットドライバ類\n\
-ペンタブ関連のツール類類\n\
+ペンタブ関連のツール類\n\
 　":LBL 'bash -c ""' \
---field="---萌え化スクリプト---":FBTN 'bash -c " echo 24 ; kill -USR1 $YAD_PID"' \
+--field="---便利ツール---":FBTN 'bash -c " echo 24 ; kill -USR1 $YAD_PID"' \
+--field="\
+ファイル検索、コーデックなど、便利なユーティリティ類になります。\n\
+安定な環境を利用する方は、区分APTのみをご利用ください。\n\
+　":LBL 'bash -c ""' \
+--field="---萌え化スクリプト---":FBTN 'bash -c " echo 25 ; kill -USR1 $YAD_PID"' \
 --field="\
 萌え化スクリプト類になります。\n\
 説明は。http://moebuntu.web.fc2.com/moehowto.htmlを参照ください。\n\
 デスクトップを萌化する場合ご利用ください。\n\
-　":LBL 'bash -c ""' \
---field="---便利ツール---":FBTN 'bash -c " echo 25 ; kill -USR1 $YAD_PID"' \
---field="\
-ファイル検索、コーデックなど、便利なユーティリティ類になります。\n\
-安定な環境を利用する方は、区分APTのみをご利用ください。\n\
 　":LBL 'bash -c ""' \
   2>/dev/null )
 
@@ -125,31 +160,29 @@ case  $listflag in
 		cat   $datadir/01catalogapt.txt >  $datadir/00pkgcatalog.txt
 		
          ;;
-
      22) 
           
 		cat  $datadir/01catalogppa.txt > $datadir/00pkgcatalog.txt
 		
-		;;
-                 
+		;;                 
      23) 
-          
+        
 		cat  $datadir/01catalogpen.txt > $datadir/00pkgcatalog.txt
 		
 		;;
      24) 
           
-		cat  $datadir/01catalogmoe.txt > $datadir/00pkgcatalog.txt
+		cat  $datadir/01catalogutil.txt > $datadir/00pkgcatalog.txt
 		
 		;;
      25) 
           
-		cat  $datadir/01catalogutil.txt > $datadir/00pkgcatalog.txt
+		cat  $datadir/01catalogmoe.txt > $datadir/00pkgcatalog.txt
 		
 		;;
-
 	 * )
 	    exit 0
+	    
 		;;
 		
 esac         
@@ -278,6 +311,7 @@ rm -f "/tmp/_pkginstall_display"
 rm -f "/tmp/_pkginstall_before"
 
 }
+
 #######################################################
 #  リストから変更したい項目を選択
 #######################################################

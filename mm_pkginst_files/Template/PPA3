@@ -1,0 +1,67 @@
+#!/bin/bash
+
+ppa="dummy"
+pkgs="mintstick"
+
+datadir=$(cd $(dirname "$0") && pwd)
+mintstr="mint"
+
+
+. ${datadir}/00common.fnc
+
+# Check
+if [ "$1" == "-c" ] ; then
+	if [ $(_check ${pkgs}) == "y" ]  &&  [ $(grep -c $mintstr  /etc/apt/sources.list.d/official-package-repositories.list) -eq 0 ]  ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+_mintstickinstall()
+{
+	
+	echo "mintstick_1.4.0_all.debをダウンロードしています..."
+	cd /tmp
+		
+	if wget http://packages.linuxmint.com/pool/main/m/mintstick/mintstick_1.4.0_all.deb ; then
+		_log "mintstick_1.4.0_all.debのダウンロードに成功しました。"
+	else
+		_err "mintstick_1.4.0_all.debのダウンロードに失敗しました。"
+		return 1
+	fi
+		
+	cd /tmp
+		
+	if sudo dpkg -i mintstick_1.4.0_all.deb ; then
+		_log "mintstick_1.4.0_all.debインストールに成功しました。"
+	else
+		_err "mintstick_1.4.0_all.debインストールに失敗しました。"
+		return 1
+	fi
+		
+	_log "一時ファイルを除去しています..."
+	cd /tmp
+
+	rm -f  mintstick_1.4.0_all.deb
+
+}
+
+	if [ $(_check ${pkgs}) == "y" ]  &&  [ $(grep -c $mintstr  /etc/apt/sources.list.d/official-package-repositories.list) -gt 0 ]  ; then
+		_err "既に他のバージョンが存在します。他のバージョンのアンインストールが必要です。"
+
+	else
+	_mintstickinstall
+	
+	fi
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+	echo "MintStick1.4.0アプリを削除します。"
+	_purge ${pkgs}
+	
+fi

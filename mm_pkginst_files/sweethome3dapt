@@ -1,7 +1,7 @@
 #!/bin/bash
 
-pkgs="gimp "
-ppa="otto-kesselgulasch/gimp"
+ppa="Dummy"
+pkgs="sweethome3d  sweethome3d-furniture"
 
 datadir=$(cd $(dirname "$0") && pwd)
 
@@ -9,7 +9,7 @@ datadir=$(cd $(dirname "$0") && pwd)
 
 # Check
 if [ "$1" == "-c" ] ; then
-	if [ $(_check ${pkgs}) == "y" ]  &&  [ $(_ppacheck ${ppa}) == "n" ] ; then
+	if [ $(_check ${pkgs}) == "y" ]  &&  [ ! -e /opt/SweetHome3D-6.2/SweetHome3D ] ; then
 		echo TRUE
 	else	
 		echo FALSE 
@@ -18,7 +18,7 @@ if [ "$1" == "-c" ] ; then
 # Install
 elif [ "$1" == "-i" ] ; then
 
-	if [ $(_check ${pkgs}) == "y" ]  &&  [ $(_ppacheck ${ppa}) == "y" ] ; then
+	if [ -e /opt/SweetHome3D-6.2/SweetHome3D ] ; then
 		_err "既に他のバージョンが存在します。他のバージョンのアンインストールが必要です。"
 	else
 
@@ -26,12 +26,10 @@ elif [ "$1" == "-i" ] ; then
 	
 	fi
 
-	cp /usr/share/applications/gimp.desktop $(_desktop)/gimp.desktop
 	
 # Purge
 elif [ "$1" == "-p" ] ; then
 	_purge ${pkgs}
 
-	rm -f $(_desktop)/gimp.desktop
 
 fi

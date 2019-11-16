@@ -18,6 +18,7 @@ if [ "$1" == "-c" ] ; then
 # Install
 elif [ "$1" == "-i" ] ; then
 
+
 _installtoonz()
 {
 
@@ -91,7 +92,6 @@ cd /tmp
 rm -rf libmypaint
 rm -rf opentoonz 
 echo 1
-return 0
 
 }
 
@@ -113,7 +113,7 @@ _uninstopentoonz()
 {
 	sudo rm -rf /opt/opentoonz
 	sudo rm -f  /usr/share/applications/opentoonz.desktop
-	rm -rf  ~/.config/OpenToonz
+	rm -rf  $HOME/.config/OpenToonz
 	echo 1
 	return 0
 

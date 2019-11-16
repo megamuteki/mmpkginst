@@ -26,6 +26,15 @@ elif [ "$1" == "-i" ] ; then
 	
 	fi
 
+	if [ $(_check ${pkgs}) == "y" ]  &&  [ $(_ppacheck ${ppa}) == "n" ] ; then
+		echo TRUE
+	else	
+		echo FALSE 
+	fi
+
+
+
+
 
 #	cp /usr/share/applications/krita.desktop $(_desktop)/krita.desktop
 	

@@ -1,0 +1,57 @@
+#!/bin/bash
+
+ppa="dummy"
+pkgs="mintstick"
+
+datadir=$(cd $(dirname "$0") && pwd)
+mintrepo="deb http://packages.linuxmint.com/ tessa main"
+
+
+. ${datadir}/00common.fnc
+
+# Check
+
+if [ "$1" == "-c" ] ; then
+	if [ $(_check ${pkgs}) == "y" ]  &&  [ $(grep -c $mintrepo  /etc/apt/sources.list.d/mint.list) -gt 0 ]  ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+_mintstickinstall()
+{
+	sudo apt-get install linuxmint-keyring 
+
+	sudo echo deb http://packages.linuxmint.com/ tara main | tee -a  /etc/apt/sources.list.d/mint.list 
+	sudo sort /etc/apt/sources.list.d/mint.list | uniq | sudo tee  /etc/apt/sources.list.d/mint.list
+	sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com `sudo apt update 2>&1 | grep -o '[0-9A-Z]\{16\}$' | xargs`
+	sudo apt update
+	_install ${pkgs}	
+}
+
+
+	if [ $(_check ${pkgs}) == "y" ]  &&   [ $(grep -c $mintrepo  /etc/apt/sources.list.d/mint.list) -gt 0 ] ; then
+		_err "既に他のバージョンが存在します。他のバージョンのアンインストールが必要です。"
+
+	else
+	_mintstickinstall
+	
+	fi
+
+
+
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+	echo "アプリを削除します。"
+	_purge ${pkgs}
+	echo "リポジトリを削除します。"	
+	sed -i "/$mintrepo/d" /etc/apt/sources.list.d/mint.list
+	
+
+fi

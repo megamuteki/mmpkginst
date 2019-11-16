@@ -1,6 +1,8 @@
 「適用」の意味
-本パッケージインストーラは、星の数ほどあるディストロの中で、
+本パッケージインストーラは、
 linux MINT XFCE及びKDE　NEON（UserEdition）を基準に作成されています。
+インストールとアンインストールの方法を忘れがちですが、
+その都度、調べなくても出来るようにしました。
 MINT：Linux　Mint（XFCE）向け
 NEON：Linux　KDE　NEON（UserEdittion）向け
 BOTH：どちらでも構わない。

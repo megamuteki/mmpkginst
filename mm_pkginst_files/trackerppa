@@ -1,0 +1,68 @@
+#!/bin/bash
+
+ppa="dummy"
+pkgs="tracker"
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+
+# Check
+if [ "$1" == "-c" ] ; then
+	if [ -e /opt/tracker/tracker.jar ] ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+_installtracker()
+{
+	cd /tmp
+	https://physlets.org/tracker/installers/Tracker-5.1.2-linux-64bit-installer.run
+	sudo chmod 755 /tmp/Tracker-5.1.2-linux-64bit-installer.run
+	sudo /tmp/Tracker-5.1.2-linux-64bit-installer.run
+}
+
+	_installtracker
+	
+	if [ -e /opt/tracker/tracker.sh ] ; then
+		_log "Trakcerのインストールに成功しました。"
+	else
+		_err "Trackerのインストールに失敗しました。フォルダが残ったかもしれませせん。"
+	fi
+
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+
+_uninsttracker()
+{
+
+	if [ -e /opt/tracker/uninstall_Trackerr ] ; then
+		sudo /opt/tracker/uninstall_Tracker
+
+	else
+		sudo rm -rf /opt/tracker
+		rm -rf  .config/OSP
+		sudo rm -f  /usr/share/applications/tracker.desktop
+		echo 1
+		return 0
+	fi
+	
+
+}
+       
+    
+	if [ $(_uninsttracker) ] ; then
+		_log "Trackerのアンインストールに成功しました。"
+	else
+		_err "Traclerのアンインストールに失敗したかフォルダが残ったかもしれませせん。"
+	fi
+
+
+fi

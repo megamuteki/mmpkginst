@@ -2,10 +2,10 @@
 Name=mmpkginst
 Name[jp]=mmパッケージインストーラ
 Comment=萌え化インストール
-Exec=bash ./mm_pkginst.sh
+Exec=bash -c '_PWD="$PWD"; cd "`echo $0 | sed s/mmpkginst.desktop$//`"; ./mm_pkginst.sh run; cd "_PWD"' %k
 Terminal=false
 Type=Application
 Icon=video-display
 StartupNotify=true
 Categories=System;Settings;
-Name[ja_JP.eucJP]=mmpkginst
+Name[ja_JP.eucJP]=mmpkginstlocal

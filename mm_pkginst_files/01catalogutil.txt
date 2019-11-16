@@ -70,5 +70,39 @@ PPA
 ArtOfIllusion等のOpenJDK8アプリを使用する時。複数ある場合はJDK８に設定する。
 jdk8utilppa
 ---
-
-
+Mint標準MintStickのUSBイメージライタ
+MINT
+APT
+Mint標準のリポジトリのMintStickイメージライタ。
+mintstickutilapt
+---
+KDE Neon向けMintStickのUSBイメージライタ
+NEON
+DEB
+MintMainのDebパッケージから、MintStickをインストールします。
+mintstickutilppa
+---
+SystemBackバックアップアプリ
+BOTH
+SRC
+EdomondsWEBからSystemBackをインストールします。
+systembackutilppa
+---
+Rescue用BootRepair,rescuezilla 起動用ISOイメージ作成
+BOTH
+ISO
+緊急用のブート修復、バックアップソフトの起動用ISOイメージを作成します。
+rescuezillautilppa
+---
+Rstudioデータ復元用アプリ
+BOTH
+DEB
+データを復元するためのソフト
+rstudioutilppa
+---
+y-ppa manager PPA管理アプリ
+BOTH
+PPA
+PPAの重複整理、検索、削除などを行うツール
+yppamgrutilppa
+---

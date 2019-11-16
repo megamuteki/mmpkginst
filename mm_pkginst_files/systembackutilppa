@@ -1,0 +1,77 @@
+#!/bin/bash
+
+ppa="dummy"
+pkgs="systemback"
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+
+
+. ${datadir}/00common.fnc
+
+# Check
+if [ "$1" == "-c" ] ; then
+	if [ $(_check ${pkgs}) == "y" ]  ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+_systembackinstall()
+{
+	
+	echo "SystemBack1.9.3をダウンロードしています..."
+	cd /tmp
+		
+	wget --max-redirect=20 -O systemback193.tar  https://www.dropbox.com/s/6mw0crupd7e2jfr/systemback-install_pack-1.9.3.tar.xz?dl=0 | tar
+	
+	if [ -e /tmp/systemback193.tar ] ; then
+		_log "systemback193のダウンロードに成功しました。"
+	else
+		_err "systemback193のダウンロードに失敗しました。"
+		return 1
+	fi
+
+	echo "ダウンロードしたアーカイブを解凍しています..."
+
+	cd /tmp
+	if tar -xvf systemback193.tar ; then
+		_log "アーカイブの解凍に成功しました。"
+	else
+		_err "アーカイブの解凍に失敗しました。"
+		return 1
+	fi
+
+	cd /tmp/systemback-install_pack-1.9.3
+	sudo sh ./install.sh
+
+
+	if [ $(_check ${pkgs}) == "y" ]  ; then
+		_log "systemback1.9.3のインストールに成功しました。"
+	else
+		_err "systemback1.9.3のインストールに失敗しました。"
+		return 1
+	fi
+		
+	_log "一時ファイルを除去しています..."
+	cd /tmp
+
+	rm -f  systemback193.tar
+	rm -rf systemback-install_pack-1.9.3
+	
+}
+
+	_systembackinstall 
+
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+	echo "systemback193アプリを削除します。"
+	_purge ${pkgs}
+	
+fi

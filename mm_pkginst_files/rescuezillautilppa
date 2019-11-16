@@ -1,0 +1,96 @@
+#!/bin/bash
+
+ppa="dummy"
+pkgs="dummy"
+devpkgs="git git-lfs git make rsync sudo debootstrap isolinux syslinux syslinux-utils squashfs-tools genisoimage memtest86+ gettext"
+
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+
+
+. ${datadir}/00common.fnc
+
+# Check
+if [ "$1" == "-c" ] ; then
+	if [ -d /home/Rescuekit ]  ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+_rescuezillainstall()
+{
+	
+	mkdir /tmp/Rescuekit
+	cd /tmp/Rescuekit
+	echo "resucuezilla iso をダウンロードしています..."
+	
+	sudo wget https://github.com/rescuezilla/rescuezilla/releases/download/1.0.5/redobackup-livecd-1.0.5.iso
+			
+	if [ -f /tmp/Rescuekit/redobackup-livecd-1.0.5.iso ] ; then
+		_log "rescuezillaのダウンロードに成功しました。"
+	else
+		_err "rescuezillaのダウンロードに失敗しました。"
+		return 1
+	fi
+
+	echo "BootRepar iso をダウンロードしています..."
+
+	sudo wget https://sourceforge.net/projects/boot-repair-cd/files/boot-repair-disk-64bit.iso
+
+	if [ -f /tmp/Rescuekit/boot-repair-disk-64bit.iso ] ; then
+		_log "BootRepairのダウンロードに成功しました。"
+	else
+		_err "BootRepairのダウンロードに失敗しました。"
+		return 1
+	fi
+
+	cd /tmp
+
+	echo "レスキュー用のrescuezilla BootRepair ISOファイルを/home/Rescuekitに保存します。"
+	
+	sudo mv /tmp/Rescuekit  /home/
+	if [ -d /home/Rescuekit ] ; then
+		_log "Rescuekit ISO'sの保存に成功しました。"
+	else
+		_err "Rescuekit ISO'sの保存に失敗しました。"
+		return 1
+	fi
+
+	
+	_log "/home/Rescekit/redobackup-livecd-1.0.5.isoから起動用USBを作成して緊急用に保管してください。"
+	_log "/home/Rescekit/boot-repair-disk-64bit.isoから起動用USBを作成して緊急用に保管してください。"
+
+		
+	_log "一時ファイルを除去しています..."
+	cd /tmp
+
+
+	if [ -d /tmp/Rescuekit ] ; then
+		sudo rm -rf /tmp/Rescuekit
+		_log "一時ファイルの削除に成功しました。"
+	fi
+	
+}
+
+	_rescuezillainstall 
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+	echo "RescueKitを削除します。"
+
+	if [ -d /home/Rescuekit ] ; then
+		sudo rm -rf /home/Rescuekit
+		_log "/home/Rescuekitの削除に成功しました。"
+	else
+		_err "/home/Rescuekitに失敗しました。"
+		return 1
+	fi
+	
+fi

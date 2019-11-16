@@ -10,21 +10,24 @@ datadir=$(cd $(dirname "$0") && pwd)
 # Check
 
 if [ "$1" == "-c" ] ; then
-	if [ $(_check ${pkgs}) == "n" ] ; then
-		echo FALSE
-	else
+	if [ $(_check ${pkgs}) == "y" ]  &&  [ $(_ppacheck ${ppa}) == "y" ]  ; then
 		echo TRUE
+	else
+		echo FALSE
 	fi
 	
 # Install
 elif [ "$1" == "-i" ] ; then
 
-	echo "PPAを登録します。"
+
+	if [ $(_check ${pkgs}) == "y" ]  &&  [ $(_ppacheck ${ppa}) == "n" ] ; then
+		_err "既に他のバージョンが存在します。他のバージョンのアンインストールが必要です。"
+
+	else
 	_ppainstall ${ppa}  
-
 	_install ${pkgs}
-
-	cp /usr/share/applications/blender.desktop $(_desktop)/blender.desktop
+	
+	fi
 
 	
 # Purge
@@ -34,6 +37,6 @@ elif [ "$1" == "-p" ] ; then
 	_ppapurge ${ppa}
 
 	_purge ${pkgs}
-	rm -f $(_desktop)/blender.desktop
+
 
 fi

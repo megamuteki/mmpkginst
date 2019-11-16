@@ -1,7 +1,7 @@
 #!/bin/bash
 
-ppa="openjdk-r/ppa"
-pkgs="openjdk-8-jdk"
+ppa="webupd8team/y-ppa-manager"
+pkgs="y-ppa-manager"
 
 datadir=$(cd $(dirname "$0") && pwd)
 
@@ -26,8 +26,6 @@ elif [ "$1" == "-i" ] ; then
 	_install ${pkgs}
 	
 	fi
-#使用するJavaバージョンを変更する。	
-    sudo update-java-alternatives --jre-headless --jre --set java-1.8.0-openjdk-amd64
 
 # Purge
 elif [ "$1" == "-p" ] ; then

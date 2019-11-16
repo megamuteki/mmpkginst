@@ -1,0 +1,118 @@
+#!/bin/bash
+
+ppa="dummy"
+pkgs="sweethome3d"
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+
+
+# Check
+if [ "$1" == "-c" ] ; then
+
+	if  [ $(_check ${pkgs}) == "n" ]  &&  [ -e /opt/SweetHome3D-6.2/SweetHome3D ] ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+		
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+_installsweethome3d()
+{	
+	cd /tmp
+		
+	wget https://sourceforge.net/projects/sweethome3d/files/SweetHome3D/SweetHome3D-6.2/SweetHome3D-6.2-linux-x64.tgz
+	tar -zxvf SweetHome3D-6.2-linux-x64.tgz
+    sudo mv   SweetHome3D-6.2  /opt
+	rm  SweetHome3D-6.2-linux-x64.tgz
+    sudo cp /opt/SweetHome3D-6.2/ /usr/share/icons/
+	# DeskTopの追加
+	echo "[Desktop Entry]
+Version=1.0
+Name=Sweet Home 3D 6.2
+GenericName=Interior 2D design application with 3D preview
+Comment=インテリアデザイン向け Javaアプリケーション。 素早く家具などの配置を行えます。３Dプレビューもできます。
+Exec=/opt/SweetHome3D-6.2/SweetHome3D
+Icon=/opt/SweetHome3D-6.2/SweetHome3DIcon.png
+StartupNotify=true
+StartupWMClass=com-eteks-sweethome3d-SweetHome3D
+Terminal=false
+Type=Application
+Categories=Graphics;2DGraphics;3DGraphics;
+Keywords=interior;design;2D;3D;home;house;furniture;java;" | sudo tee /usr/share/applications/sweethome3d.desktop
+
+	# DeskTop For Legacy Cardの追加
+	echo "[Desktop Entry]
+Version=1.0
+Name=Sweet Home 3D 6.2 Legacy
+GenericName=Interior 2D design application with 3D preview
+Comment=インテリアデザイン向け Javaアプリケーション。 素早く家具などの配置を行えます。３Dプレビューもできます。
+Exec=/opt/SweetHome3D-6.2/SweetHome3D-Java3D-1_5_2
+Icon=/opt/SweetHome3D-6.2/SweetHome3DIcon.png
+StartupNotify=true
+StartupWMClass=com-eteks-sweethome3d-SweetHome3D
+Terminal=false
+Type=Application
+Categories=Graphics;2DGraphics;3DGraphics;
+Keywords=interior;design;2D;3D;home;house;furniture;java;" | sudo tee /usr/share/applications/sweethome3dlegacy.desktop
+
+
+}
+
+
+
+
+	if [ $(_check ${pkgs}) == "y" ]  ; then
+		_err "既に他のバージョンが存在します。他のバージョンのアンインストールが必要です。"
+	else
+  
+	_installsweethome3d
+	
+	fi
+
+
+	if [ -e /opt/SweetHome3D-6.2/SweetHome3D ] ; then
+		_log "SweetHome3Dのインストールに成功しました。"
+	else
+		_err "SweetHome3Dのインストールに失敗しました。フォルダが残ったかもしれませせん。"
+	fi
+
+
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+
+	_uninstallsweethome3d()
+{
+	sudo rm -rf /opt/SweetHome3D-6.2/
+	sudo rm -rf $HOME/.eteks	
+	sudo rm -f  /usr/share/applications/sweethome3d.desktop
+	sudo rm -f  /usr/share/applications/sweethome3dlegacy.desktop
+	echo 1
+	return 0
+
+}
+       
+    
+	if [ $( _uninstallsweethome3d ) ] ; then
+		_log "SweetHome3Dのアンインストールに成功しました。"
+	else
+		_err "SweetHome3Dのアンインストールに失敗したかフォルダが残ったかもしれませせん。"
+	fi
+
+
+fi
+
+#OtherSource
+#http://ro-mirrors.evowise.com/ubuntu/pool/universe/s/sweethome3d/sweethome3d_6.2%2Bdfsg-1_all.deb
+#https://launchpad.net/ubuntu/+archive/primary/+files/sweethome3d_6.2+dfsg-1_all.deb
+#https://sourceforge.net/projects/sweethome3d/files/SweetHome3D/SweetHome3D-6.2/SweetHome3D-6.2-linux-x64.tgz/download
+#http://sourceforge.net/projects/sweethome3d/files/SweetHome3D/SweetHome3D-6.2/SweetHome3D-6.2-linux-x64.tgz/download
+#https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/sweethome3d/6.2+dfsg-1/sweethome3d_6.2+dfsg.orig.tar.xz
+#最新版のダウンロード、ライブラリ類を一括ダウンロードする。（保留中）
+#wget -r -nH -A tgz,zip  --cut-dirs=3   https://sourceforge.net/projects/sweethome3d/files/SweetHome3D/
+
