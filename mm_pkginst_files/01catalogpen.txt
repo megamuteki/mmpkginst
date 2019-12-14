@@ -1,32 +1,56 @@
-MoebuntuThemeの追加
+BrightnessController輝度、色温度調整アプリ
 BOTH
-GIT
-MoeBuntuのテーマを/usr/share/thmnesへインストールします。
-moebuntu-themes
+APT
+輝度や色温度を変更するデュアルモニタ対応アプリ。
+brightnesscontrollerpenapt
 ---
-MoebuntuPinkIconsの追加
+（最新版）BrightnessController輝度、色温度調整アプリ
 BOTH
-GIT
-MoeBuntuのPinkIconsを/usr/share/iconsへインストールします。
-moebuntu-icons
+PPA
+輝度や色温度を変更するデュアルモニタ対応アプリ。
+brightnesscontrollerpenppa
 ---
-MoebuntuShell2の追加
+xppenex カーネルモジュール
+BOTH
+SRC
+xp-penタブのカーネルモジュール。WACOMドライバが使えます。
+xppenexppenppa
+---
+xppendriver ペンタブドライバ 
+BOTH
+SRC
+xp-penペンタブレットドライバ。XP-PENのタブレットが使えます。
+xppendriverpenppa
+---
+pencal 液タブキャリブレータ 
+BOTH
+SRC
+ミラーモード及びシングルモニタ用液タブキャリブレータ。６パターン登録できます。
+pencalpenppa
+---
+penmapペンタブマッピング 
+BOTH
+SRC
+ペンタブの描画先のモニタを変更するツール
+penmappenppa
+---
+Kde-Config-Tablet ペンタブ設定ツール 
+NEON
+APT
+Kde環境の高機能なペンタブ設定ツール
+kdeconfigtabletpenapt
+---
+Arandrディスプレイ設定ツール
+BOTH
+APT
+ディスプレイのレイアウトなどを設定するツール
+arandrpenapt
+---
+HID-VIZ ペンタブシステムモニタ
 MINT
 GIT
-MoeBuntuのテーマを/usr/share/thmnesへインストールします。
-moebuntu-shells
----
-MoebuntuXFCE 設定
-MINT
-Conf
-MoeBuntuのPinkIconsとPinkThemeを設定します。
-moebuntu-xfcesetting
----
-MoebuntuQT5アプリの萌化設定
-MINT
-Conf
-MoeBuntuのQT5アプリの萌化設定を設定します。
-moebuntu-qt5
+ペンタブの接続状況などを解析するアプリ
+hidvizpenppa
 ---
 
 

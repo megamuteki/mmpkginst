@@ -48,10 +48,13 @@ _mintstickinstall()
 # Purge
 elif [ "$1" == "-p" ] ; then
 
-	echo "アプリを削除します。"
+
 	_purge ${pkgs}
-	echo "リポジトリを削除します。"	
-	sed -i "/$mintrepo/d" /etc/apt/sources.list.d/mint.list
+
+
+	echo "PPAを削除します。"
+	_ppapurge ${ppa}
+
 	
 
 fi

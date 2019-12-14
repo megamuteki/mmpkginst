@@ -1,0 +1,95 @@
+#!/bin/bash
+
+ppa=" dummy"
+pkgs=" dummy"
+devpkgs=" cmake build-essential qtbase5-dev libprotobuf-dev protobuf-compiler libusb-1.0-0-dev libgl-dev "
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+	
+# Check
+if [ "$1" == "-c" ] ; then
+	if [ -e /usr/local/bin/hidviz ] ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+
+_installhidviz()
+{
+
+cd /tmp
+
+git clone --recursive https://github.com/ondrejbudai/hidviz.git
+mkdir hidviz/build
+cd hidviz/build
+cmake ..
+make -j$(nproc)
+sudo make install
+
+# DeskTopの追加
+echo "[Desktop Entry]
+Version=1.3.0
+Encoding=UTF-8
+Name=HID-VIZ
+Comment=Pentablet System Monitor
+Exec=hidviz 
+Icon=display
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=System;Settings;" | sudo tee -a  /usr/share/applications/hidviz.desktop
+
+rm -rf /tmp/hidviz
+
+}
+
+
+#install ${devpkgs}
+echo "インストールに必要なライブラリをインストールします。少し、時間がかかります。"
+	_install ${devpkgs}
+
+# Install hidviz
+	_installhidviz | grep -e Error -e Fatal    >> /tmp/mm_pkginst.log
+
+
+	if [ -e /usr/local/bin/hidviz ] ; then
+		_log "hidvizのインストールに成功しました。"
+	else
+		_err "hidvizのインストールに失敗しました。フォルダが残ったかもしれませせん。"
+
+		if [ -e /usr/lib/x86_64-linux-gnu/libEGL.so.1 ] ; then
+			sudo rm /usr/lib/x86_64-linux-gnu/libEGL.so; sudo ln /usr/lib/x86_64-linux-gnu/libEGL.so.1 /usr/lib/x86_64-linux-gnu/libEGL.so
+		fi
+		
+		_err "再起動して、再度実行してみると良いかも知れません。"
+
+	fi
+
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+_uninstallhidviz()
+{
+	sudo rm -rf /usr/local/bin/hidviz
+	sudo rm -f  /usr/share/applications/hidviz.desktop
+	return 0
+
+}
+       
+    
+	if  _uninstallhidviz ; then
+		_log "HID-VIZのアンインストールに成功しました。"
+	else
+		_err "HID-VIZのアンインストールに失敗しました。フォルダが残ったかもしれませせん。"
+	fi
+
+
+fi

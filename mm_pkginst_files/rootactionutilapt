@@ -1,0 +1,99 @@
+#!/bin/bash
+
+ppa="dummy"
+aptpkgs="dummy"
+targz="rootactions_servicemenu_2.9.1.tar.gz"
+tardir="rootactions_servicemenu_2.9.1"
+kde5data="$(kf5-config --path data | cut -d: -f1)"
+file=$kde5data/kservices5/ServiceMenus/rootactions-servicemenu.pl
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+
+# Check
+
+if [ "$1" == "-c" ] ; then
+	if  [ -e $file ]   ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+_installrootaction()
+{
+ 
+    	echo "$targzをダウンロードします。"
+	cd /tmp
+	
+	if wget -c https://buzo.eu/mirror/kde/$targz ; then
+		_log "$targzのダウンロードに成功しました。"
+	else
+		_err "$targzのダウンロードに失敗しました。"
+	
+	fi
+	
+    tar zxvf ./$targz
+
+    cd $tardir
+    sudo ./install.sh
+
+    cd /tmp
+    rm -rf $tardir
+    rm -f $targz
+}
+
+
+	if _installrootaction  ; then
+		_log "$tardirのインストールに成功しました。"
+	else
+		_err "$debのインストールに失敗しました。"
+
+	fi
+
+
+	_log "一時ファイルを除去しています..."
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+
+_uninstallrootaction()
+{
+ 
+    	echo "$targzをダウンロードします。"
+	cd /tmp
+	
+	if wget -c https://buzo.eu/mirror/kde/$targz ; then
+		_log "$targzのダウンロードに成功しました。"
+	else
+		_err "$targzのダウンロードに失敗しました。"
+	
+	fi
+	
+    tar zxvf ./$targz
+
+    cd $tardir
+    sudo ./deinstall.sh
+
+    cd /tmp
+    rm -rf $tardir
+    rm -f $targz
+}
+
+
+	if _uninstallrootaction  ; then
+		_log "$tardirのアンインストールに成功しました。"
+	else
+		_err "$tardirのアンインストールに失敗しました。"
+
+	fi
+
+	_log "一時ファイルを除去しています..."
+
+fi
+

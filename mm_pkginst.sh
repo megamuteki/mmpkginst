@@ -1,80 +1,36 @@
 #!/bin/bash
 
+######################################################
+#二重起動回避
 
-#ターミナルの設定
-if [ $(dpkg-query -W -f='${Status}' xfce4-terminal  2>/dev/null | grep -c "ok installed") -eq 1 ];
+PROCNAME=$(basename $0);
+PROCID=$(pidof -x $PROCNAME)
+if [ $(echo $PROCID | awk '{print NF}') -gt 1 ];
 then
-	termapp="xfce4-terminal"
-
-else
-	termapp="xterm"
+  # sciript is already runnning.
+  exit 0;
 fi
 
+######################################################
+# システムのアップデートと必要なライブラリなどのインストール
+#leafpad, thunar, yad, git, build-essential, \n fdupes, ppa-purgeの確認とインストールをします。
+#######################################################
 
-#エディタの設定
-if [ $(dpkg-query -W -f='${Status}' leafpad  2>/dev/null | grep -c "ok installed") -eq 1 ];
-then
-	editapp="leafpad"
-
-else
-	echo "leafpad  エディタをインストールします。"
-	sudo apt install leafpad -y
-fi
-
-#ファイルマネージャの設定
-if [ $(dpkg-query -W -f='${Status}' thunar  2>/dev/null | grep -c "ok installed") -eq 1 ];
-then
-	filemanapp="thunar"
-
-else
-	echo "thunar ファイルマネージャーをインストールします。"
-	sudo apt install thunar -y
-
-fi
+#.txt以外のファイルに実行許可を与える。
+#ls | grep -v -E 'txt$' | xargs sudo chmod +x
+#ls | grep -v -E 'txt$' | xargs sudo umaxk a+x
 
 
-#yadの設定
-if [ $(dpkg-query -W -f='${Status}' yad  2>/dev/null | grep -c "ok installed") -eq 1 ];
-then
-	yadapp="yad"
+x-terminal-emulator -e bash -c  $(pwd)/mm_pkginst_files/00startup
 
-else
-	echo "yadをインストールします。"
-	sudo apt install yad -y
+startuppid=$(ps --no-heading -C  00startup  -o pid)
 
-fi
-
-
-#gitの設定
-if [ $(dpkg-query -W -f='${Status}' git  2>/dev/null | grep -c "ok installed") -eq 1 ];
-then
-	gitapp="git"
-
-else
-	echo "gitをインストールします。"
-	sudo apt install git -y
-
-fi
-
-
-#基本開発環境の設定
-if [ $(dpkg-query -W -f='${Status}' build-essential 2>/dev/null | grep -c "ok installed") -eq 1 ];
-then
-	build-essentialapp="build-essential"
-
-else
-	echo "build-essentialをインストールします。"
-	sudo apt install build-essential -y
-
-fi
-
-
-
+tail -f /dev/null --pid=$startuppid; echo "go"
 
 ######################################################
 #   リストモードの選択とリストの作成
 #######################################################
-
+#選択したメニューからパッケージリストを作成する。
 _genpkglist()
 {
 datadir=$(cd $(dirname "$0") && pwd)/mm_pkginst_files
@@ -99,7 +55,7 @@ fi
 
 
 
-
+#どのパッケージリストを使用するかを選択する。
 listflag=$(yad \
 --title="mm-pkginstaller" \
 --width="640" \
@@ -234,10 +190,7 @@ BR="
 #  テキストファイルをリスト形式に変換
 #######################################################
 
-_makelist()
-{
-
-
+#表示と比較に必要なリストを作成する。
 _txt2list()
 {
 	echo 0
@@ -284,7 +237,8 @@ _txt2list()
 	return 0
 }
 
-
+_makelist()
+{
 
 
 _txt2list | \
@@ -312,11 +266,8 @@ rm -f "/tmp/_pkginstall_before"
 
 }
 
-#######################################################
-#  リストから変更したい項目を選択
-#######################################################
-# リストを表示
 
+#リストを表示する。
 _dispList()
 {
 ipcrm --all=shm
@@ -340,14 +291,17 @@ after=$(
 	--button="gtk-quit:100" \
     --button="gtk-cancel:200" \
     --button="gtk-ok:0" 
-
-)
-
-
+	)
 }
 
 
+
+#######################################################
+#  リストから変更したい項目を選択
+#######################################################
+#リストを表示
 #リストを作成する
+
 _listing()
 {
 _genpkglist
@@ -367,7 +321,7 @@ _listing
 
 done
    
-# QUITした場合は終了
+# QUITした場合は終了terminal
 if [ $genflag -eq 100 ] ; then
 	exit 1
 fi
@@ -376,7 +330,6 @@ fi
 #######################################################
 #  変更箇所の検出・パース
 #######################################################
-
 
 # リストを比較するための一時ファイルを作成
 echo "${before}" > "/tmp/_pkginstall_before"
@@ -428,6 +381,8 @@ out_list=$(echo "$out" | awk -F"|" '{print $6}')
 
 # 残りの処理は別窓に渡す
 x-terminal-emulator -e "${datadir}/00doinst" "$(echo ${in_list} \| ${out_list})"
+#exec  "${datadir}/00doinst" "$(echo ${in_list} \| ${out_list})"
+
 
 # 終了待ち
 while true ; do
@@ -439,7 +394,9 @@ while true ; do
 done
 
 # ログを開く
-nohup leafpad $(_logfile) &
+#nohup leafpad $(_logfile) &
+#leafpad $(_logfile) 
+
 
 # 区切り文字を改行に
 _IFS="$IFS";IFS="$BR"

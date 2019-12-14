@@ -1,0 +1,63 @@
+#!/bin/bash
+
+ppa="dummy"
+pkgs="balena-etcher-electron"
+devpkgs="dummy"
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+
+# Check
+
+if [ "$1" == "-c" ] ; then
+	if [ $(_check ${pkgs}) == "y" ]  ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+	_installetcher()
+	{
+		echo "deb https://deb.etcher.io stable etcher" | sudo tee /etc/apt/sources.list.d/balena-etcher.list
+		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61
+		sudo apt-get update
+		sudo apt-get install balena-etcher-electron
+	}
+
+
+	if 	_installetcher ; then
+		_log "インストールに成功しました。"
+	else
+		_err "インストールに失敗しました。ファイルが残ったかも知れません。"
+	fi
+
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+_uninstalletcher()
+{
+
+
+
+	echo "etcherのリポジトリを削除します。"
+	sudo rm /etc/apt/sources.list.d/balena-etcher.list
+	sudo apt-get update
+}
+
+	_purge ${pkgs}
+	
+	if _uninstalletcher ; then
+		_log "アンインストールに成功しました。"
+	else
+		_err "アンインストールに失敗しました。ファイルが残ったかも知れません。"
+	fi
+
+
+
+fi

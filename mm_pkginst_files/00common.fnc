@@ -59,7 +59,7 @@ _ppacheck()
 #	grep ^ /etc/apt/sources.list /etc/apt/sources.list.d/* | grep $ppa
 #	ppa_added=`grep ^ /etc/apt/sources.list /etc/apt/sources.list.d/* | grep -v list.save | grep -v deb-src | grep deb | grep $@  | wc -l`
 
-	ppa_added=$(grep ^ /etc/apt/sources.list /etc/apt/sources.list.d/* | grep -v list.save | grep -v deb-src | grep deb | grep $@  | wc -l)
+	ppa_added=$(grep ^ /etc/apt/sources.list /etc/apt/sources.list.d/* | grep -v list.save | grep -v deb-src |grep -v "#" | grep deb | grep $@  | wc -l)
 
 	if [ $ppa_added -lt 1 ]; then
 			echo n
@@ -74,7 +74,7 @@ _aptcheck()
 {
 	local i
 	local pkgs
-	
+
 	pkgs=$(dpkg -l | grep -v ^rc | awk '{print $2}' | cut -d: -f1)
 
 	# 一つでもインストールされていない場合はnを返す
@@ -87,6 +87,28 @@ _aptcheck()
 	echo y
 
 }
+
+
+#_aptsrccheck()
+#{
+#
+#	local  aptsrc
+#	
+#	aptsrc=$( grep -r --include '*.list' '^deb ' /etc/apt/sources.list* | grep grep $@ )
+#	
+#	# 一つでもインストールされていない場合はnを返す
+#	
+#	for i in $@ ; do
+#		if [ (echo $aptsrc | wc -l) -lt 1 ]; then
+#			echo n
+#			return 0
+#		fi
+#	done
+#	echo y
+#
+#}
+#
+
 
 _check()
 {
@@ -172,6 +194,45 @@ _install()
 	return 0
 }
 
+_debinstall()
+{
+	cd /tmp
+	echo -------
+	echo debパッケージ $@ をインストールします。
+	echo
+	echo $@
+	echo 確認
+#パッケージ名を抽出する。
+	target=$@
+	deb=${target##*/}
+
+#ダウンロードする
+	if wget -c  $target ; then
+		_log "$debのダウンロードに成功しました。"
+	else
+		_err "$debのダウンロードに失敗しました。"
+	
+	fi
+		
+#インストール	
+	if sudo dpkg -i $deb  ; then
+		_log "$debインストールに成功しました。"
+	else
+		sudo apt update --fix-missing
+		if sudo apt install --fix-broken ; then
+			_log "$debインストールに成功しました。"
+		else
+			_err "$debのインストールに失敗しました。"
+
+		fi
+
+	fi
+
+	_log "一時ファイルを除去しています..."
+	rm -f $deb
+}
+
+
 _ppainstall()
 {
 	echo -----
@@ -223,19 +284,57 @@ _ppapurge()
 	echo
 	echo $@
 	echo 確認
-	
-	if sudo add-apt-repository --remove  "ppa:${@}" ; then
-		_log "$@ の削除に成功しました。"
+
+	echo  "PPAを削除すると関係するアプリケーションも削除される時があります。"
+	echo  "PPAは、後で、y-ppa managerを利用して削除できます。"
+	echo  "PPAを削除する場合は、"y" 削除しない場合は、"n"を入力してください。"
+
+	#Yes No の質問をします。
+	if _ask_yes_no "よろしいですか？"; then
+
+	# 「Yes」の時の処理
+
+		echo "ppa:${@}を削除します。"
+#		if sudo add-apt-repository --remove  "ppa:${@}" ; then
+		if sudo ppa-purge  "ppa:${@}" ; then
+
+			_log "$@ の削除に成功しました。"
+		else
+			_err "$@ の削除に失敗しました。"
+		exit
+		fi
+
 	else
-		_err "$@ の削除に失敗しました。"
-		exit 1
+	# 「No」の時の処理
+		_log "ppa:${@}を残します。削除は Y-PPA Managerなどを使用してください。"
+
 	fi
-	
+
+
 	echo
 	return 0
+
 }
 
 
+_ask_yes_no ()
+{
+  while true; do
+    echo -n "$* [y/n]: "
+    read ANS
+    case $ANS in
+      [Yy]*)
+        return 0
+        ;;  
+      [Nn]*)
+        return 1
+        ;;
+      *)
+        echo "yまたはnを入力してください"
+        ;;
+    esac
+  done
+}
 
 
 _desktop()

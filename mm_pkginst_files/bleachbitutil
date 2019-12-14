@@ -26,12 +26,10 @@ elif [ "$1" == "-i" ] ; then
 	
 	fi
 
-	cp /usr/share/applications/gimp.desktop $(_desktop)/gimp.desktop
 	
 # Purge
 elif [ "$1" == "-p" ] ; then
 	_purge ${pkgs}
 
-	rm -f $(_desktop)/gimp.desktop
 
 fi

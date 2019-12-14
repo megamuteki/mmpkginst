@@ -28,10 +28,11 @@ ScanHidden=1" > "${HOME}/.clamtk/prefs"
 	echo "シグネチャ（ウィルスの手配書）の更新を行います。"
 	sudo freshclam
 	
-	cp /usr/share/applications/clamtk.desktop $(_desktop)/clamtk.desktop
 	
 # Purge
 elif [ "$1" == "-p" ] ; then
 	_purge ${pkgs}
-	rm -f $(_desktop)/clamtk.desktop
+
+
+
 fi

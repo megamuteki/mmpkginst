@@ -1,0 +1,102 @@
+#!/bin/bash
+
+ppa=" dummy"
+pkgs=" dummy"
+devpkgs=" build-essential automake libdaemon-dev libglade2-dev libgtk2.0-dev build-essential libdaemon-dev libglade2-dev libgtk2.0-dev libdaemon-dev libglade2-dev libgtk2.0-de "
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+	
+# Check
+if [ "$1" == "-c" ] ; then
+	if [ -e /usr/local/sbin/btnx ] ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+_installbtnx()
+{
+
+cd /tmp
+
+mkdir /tmp/btnx
+
+cd /tmp/btnx
+git clone  https://github.com/cdobrich/btnx-config.git
+cd /tmp/btnx/btnx-config
+./configure
+make
+sudo make install
+
+
+cd /tmp/btnx
+git clone  https://github.com/cdobrich/btnx.git
+cd /tmp/btnx/btnx
+./configure
+make
+sudo make install
+
+rm -rf /tmp/btnx
+
+}
+
+
+
+#install ${devpkgs}
+echo "インストールに必要なライブラリをインストールします。少し、時間がかかります。"
+	_install ${devpkgs}
+
+# Install hidviz
+	_installbtnx | grep -e Error -e Fatal    >> /tmp/mm_pkginst.log
+
+	if [ -e /usr/local/sbin/btnx ] ; then
+		_log "btnxのインストールに成功しました。"
+	else
+		_err "btnxのインストールに失敗しました。フォルダが残ったかもしれませせん。"
+	fi
+
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+_uninstallbtnx()
+{
+
+cd /tmp
+
+mkdir /tmp/btnx
+
+cd /tmp/btnx
+git clone  https://github.com/cdobrich/btnx-config.git
+cd /tmp/btnx/btnx-config
+./configure
+make
+sudo make uninstall
+
+
+cd /tmp/btnx
+git clone https://github.com/cdobrich/btnx.git
+cd /tmp/btnx/btnx
+./configure
+make
+sudo make uninstall
+
+rm -rf /tmp/btnx
+
+}
+       
+    
+	if  _uninstallbtnx ; then
+		_log "btnxのアンインストールに成功しました。"
+	else
+		_err "btnxのアンインストールに失敗しました。フォルダが残ったかもしれませせん。"
+	fi
+
+
+fi

@@ -38,5 +38,13 @@ _tmppkg_uninst
 
 _log "処理が完了しました。"
 
-echo "キーを押すとウィンドウを閉じ、ログファイルと必要なアプリを開きます。"
+echo "キーを押すログファイルが開きます。"
 read ans
+
+leafpad $(_logfile) 
+wait
+
+echo "キーを押すと終了してウインドウを閉じます。"
+read ans
+
+

@@ -1,0 +1,53 @@
+#!/bin/bash
+
+ppa="dummy"
+pkgs="typora"
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+
+# Check
+
+if [ "$1" == "-c" ] ; then
+	if [ $(_check ${pkgs}) == "y" ]  ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+_installtypora()
+{
+	echo "リポジトリを登録します。"
+	wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
+	sudo add-apt-repository 'deb https://typora.io/linux ./'
+	sudo apt-get update
+
+}
+
+
+
+	if _installtypora ; then
+		_log "リポジトリの登録に成功しました。"
+		_install ${pkgs}
+
+	else
+		_err "リポジトリの登録に失敗しました。"	
+	fi
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+
+	_purge ${pkgs}
+
+
+	echo "PPAを削除します。"
+	sudo add-apt-repository　--remove  'deb https://typora.io/linux ./'	
+	sudo apt update
+
+fi

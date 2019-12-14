@@ -12,7 +12,7 @@ mintstr="mint"
 
 # Check
 if [ "$1" == "-c" ] ; then
-	if [ $(_check ${pkgs}) == "y" ]  &&  [ $(grep -c $mintstr  /etc/apt/sources.list.d/official-package-repositories.list) -eq 0 ]  ; then
+	if [ $(_check ${pkgs}) == "y" ]  &&  [ ! -f /etc/apt/sources.list.d/official-package-repositories.list ]  ; then
 		echo TRUE
 	else
 		echo FALSE
@@ -30,6 +30,8 @@ _mintstickinstall()
 
 	echo "mintstick_1.4.0_all.debをダウンロードしています..."
 	cd /tmp
+
+
 		
 	if wget http://packages.linuxmint.com/pool/main/m/mintstick/mintstick_1.4.0_all.deb ; then
 		_log "mintstick_1.4.0_all.debのダウンロードに成功しました。"
@@ -39,12 +41,20 @@ _mintstickinstall()
 	fi
 		
 	cd /tmp
+
+
+#インストールを失敗する時がある場合処理
 		
 	if sudo dpkg -i mintstick_1.4.0_all.deb ; then
 		_log "mintstick_1.4.0_all.debインストールに成功しました。"
 	else
-		_err "mintstick_1.4.0_all.debインストールに失敗しました。"
+		if sudo apt --fix-broken install ; then
+		_	log "mintstick_1.4.0_all.debインストールに成功しました。"
+		else
+			_err "mintstick_1.4.0_all.debインストールに失敗しました。"
 		return 1
+		fi
+
 	fi
 		
 	_log "一時ファイルを除去しています..."
@@ -54,7 +64,7 @@ _mintstickinstall()
 
 }
 
-	if [ $(_check ${pkgs}) == "y" ]  &&  [ $(grep -c $mintstr  /etc/apt/sources.list.d/official-package-repositories.list) -gt 0 ]  ; then
+	if  [ $(_check ${pkgs}) == "y" ]  &&  [ ! -f /etc/apt/sources.list.d/official-package-repositories.list ]  ; then
 		_err "既に他のバージョンが存在します。他のバージョンのアンインストールが必要です。"
 
 	else

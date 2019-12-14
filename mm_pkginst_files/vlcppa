@@ -34,12 +34,16 @@ elif [ "$1" == "-i" ] ; then
 	
 	_install ${pkgs}
 
-	cp /usr/share/applications/vlc.desktop $(_desktop)/vlc.desktop
 	
 # Purge
 elif [ "$1" == "-p" ] ; then
-	_ppapurge ${ppa}
+
 	_purge ${pkgs}
-	rm -f $(_desktop)/vlc.desktop
+
+
+	echo "PPAを削除します。"
+	_ppapurge ${ppa}
+
+
 	
 fi

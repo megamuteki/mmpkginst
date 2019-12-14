@@ -33,10 +33,13 @@ elif [ "$1" == "-i" ] ; then
 # Purge
 elif [ "$1" == "-p" ] ; then
 
+
+	_purge ${pkgs}
+
+
 	echo "PPAを削除します。"
 	_ppapurge ${ppa}
 
-	_purge ${pkgs}
 
 
 fi

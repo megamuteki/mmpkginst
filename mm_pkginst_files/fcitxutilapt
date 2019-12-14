@@ -1,0 +1,132 @@
+#!/bin/bash
+
+ppa="dummy"
+pkgs="fcitx fcitx-mozc fcitx-frontend-gtk2 fcitx-frontend-gtk3 fcitx-frontend-qt4 fcitx-frontend-qt5 fcitx-ui-classic kde-config-fcitx mozc-utils-gui"
+rmpkgs="ibus"
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+
+# Check
+
+if [ "$1" == "-c" ] ; then
+	if [ $(_check ${pkgs}) == "y" ]  ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+_fcitxinstall{}
+{
+
+#ibuxの設定の確認後削除（必要に応じてコメントアウト）
+#if [ $(dpkg-query -W -f='${Status}' $rmpkgs 2>/dev/null | grep -c "ok installed") -eq 1 ];
+#then
+#	_purge ${rmpkgs}
+#
+#fi
+
+
+#fcitxとGTK,QT4,5の関連パッケージをインストール
+	_install ${pkgs}
+
+#bash_profileの確認（必要に応じてコメントアウト)
+#cp  ~/.bash_profile  ~/.bash_profile.orig #バックアップを取る
+#
+#str1="export XIM_PROGRAM=fcitx"
+#out1=$(cat ~/.bash_profile | grep $str1 | wc -l)
+#
+#if [ $out1 -gt 0 ]; then
+#	echo $str1 >> ~/.bash_profile
+#fi
+#
+#str2="export XIM_PROGRAM=fcitx"
+#out2=$(cat ~/.bash_profile | grep $str2 | wc -l)
+#if [ $out2 -gt 0 ]; then
+#	echo $str2 >> ~/.bash_profile
+#fi
+#
+#str3="export GTK_IM_MODULE=fcitx"
+#out3=$(cat ~/.bash_profile | grep $str3 | wc -l)
+#if [ $out3 -gt 0 ]; then
+#	echo $str3 >> ~/.bash_profile
+#fi
+#
+#str4="export QT_IM_MODULE=fcitx"
+#out4=$(cat ~/.bash_profile | grep $str4 | wc -l)
+#if [ $out4 -gt 0 ]; then
+#	echo $str4 >> ~/.bash_profile
+#fi
+#
+#str5="export QT_IM_MODULE=fcitx"
+#out5=$(cat ~/.bash_profile | grep $str5 | wc -l)
+#if [ $out5 -gt 0 ]; then
+#	echo $str5 >> ~/.bash_profile
+#fi
+#
+#source ~/.bash_profile # 環境変数読み込み
+#fcitx-autostart # fcitxデーモンを起動＆自動起動するようにしておく(ここで先の環境変数XMODIFIERSが必要)
+#im-config -n fcitx # IMEの入力をfcitxに設定
+
+}
+
+_fcitxinstall
+
+
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+
+_fcitxuninstall()
+{
+	_purge ${pkgs}
+
+#bash_profileの確認削除（必要に応じてコメントアウト)
+#cp  ~/.bash_profile  ~/.bash_profile.orig #バックアップを取る
+#
+#str1="export XIM_PROGRAM=fcitx"
+#out1=$(cat ~/.bash_profile | grep $str1 | wc -l)
+#
+#if [ $out1 -gt 0 ]; then
+#sed -e 's/str1//g' ~/.bash_profile > ~/.bash_profile
+#fi
+#
+#str2="export XIM_PROGRAM=fcitx"
+#out2=$(cat ~/.bash_profile | grep $str2 | wc -l)
+#if [ $out2 -gt 0 ]; then
+#sed -e 's/str2//g' ~/.bash_profile > ~/.bash_profile
+#fi
+#
+#str3="export GTK_IM_MODULE=fcitx"
+#out3=$(cat ~/.bash_profile | grep $str3 | wc -l)
+#if [ $out3 -gt 0 ]; then
+#sed -e 's/str3//g' ~/.bash_profile > ~/.bash_profile
+#fi
+#
+#str4="export QT_IM_MODULE=fcitx"
+#out4=$(cat ~/.bash_profile | grep $str4 | wc -l)
+#if [ $out4 -gt 0 ]; then
+#sed -e 's/str4//g' ~/.bash_profile > ~/.bash_profile
+#fi
+#
+#str5="export QT_IM_MODULE=fcitx"
+#out5=$(cat ~/.bash_profile | grep $str5 | wc -l)
+#if [ $out5 -gt 0 ]; then
+#sed -e 's/str5//g' ~/.bash_profile > ~/.bash_profile
+#fi
+#
+#source ~/.bash_profile # 環境変数読み込み
+#fcitx-autostart # fcitxデーモンを起動＆自動起動するようにしておく(ここで先の環境変数XMODIFIERSが必要)
+#im-config -n fcitx # IMEの入力をfcitxに設定
+
+
+}
+
+_fcitxuninstall
+
+
+fi

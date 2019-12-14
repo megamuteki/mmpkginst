@@ -1,0 +1,85 @@
+#!/bin/bash
+
+ppa="kubuntu-ppa/staging-frameworks"
+pkgs="drawpile"
+devpkgs="qtbase5-dev qtmultimedia5-dev libqt5svg5-dev libminiupnpc-dev libgif-dev cmake qttools5-dev qttools5-dev-tools extra-cmake-modules giflib-tools libgif-dev qtdeclarative5-dev libkf5archive-dev miniupnpc libkf5dnssd-dev libkf5dnssd-data libkf5dnssd-dev libkf5dnssd5 libsodium-dev  libmicrohttpd-dev g++"
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+
+# Check
+if [ "$1" == "-c" ] ; then
+	if [ -e  /usr/local/bin/drawpile ] ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+_installdrawpile()
+{
+	INSTDIR="/tmp"
+	cd $INSTDIR
+
+git clone https://github.com/drawpile/Drawpile.git
+cd Drawpile
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+cd ../..
+rm -rf Drawpile
+	
+}
+
+
+	if [ $(_check ${pkgs}) == "y" ]  ; then
+		_err "既に他のバージョンが存在します。他のバージョンのアンインストールが必要です。"
+	else
+		read -n1 -p "開発版と必要なライブラリもインストールします。よろしいですか? (y/N): " yn
+		if [[ $yn = [yY] ]]; then
+			echo "インストールを継続します。"
+            echo "必要なライブラリをインストールします。時間がかかります"
+            _install ${devpkgs}
+            _log "必要なライブラリのインストールが終了しました。"            
+			_installdrawpile | grep -e Error -e Fatal  -e NOTE  >> /tmp/mm_pkginst.log
+
+		else
+			echo "終了します。"
+			exit
+		fi
+
+	fi
+		
+	if [ -e  /usr/local/bin/drawpile ] ; then
+		_log "$pkgsのインストールに成功しました。"
+	else
+		_err "$pkgsのインストールに失敗しました。フォルダが残ったかもしれませせん。"
+	fi
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+
+_uninstalldrawpile()
+{
+sudo find $HOME/.config -name "*drawpile*" | xargs rm -rf
+sudo find $HOME/.local -name "*drawpile*" | xargs rm -rf	
+sudo find /usr/local/ -name "*drawpile*" | xargs sudo rm -rf
+sudo find /usr/share/ -name "*drawpile*" | xargs sudo rm -rf
+
+}
+       
+    
+	if  _uninstalldrawpile ; then
+		_log "$pkgsのアンインストールに成功しました。"
+	else
+		_err "$pkgsのアンインストールに失敗したかフォルダが残ったかもしれませせん。"
+	fi
+
+
+fi

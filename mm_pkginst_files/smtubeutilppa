@@ -30,17 +30,15 @@ elif [ "$1" == "-i" ] ; then
 	fi
 
 
-#	cp /usr/share/applications/gimp.desktop $(_desktop)/gimp.desktop
-
 	
 # Purge
 elif [ "$1" == "-p" ] ; then
 
-	echo "PPAを削除します。"
-	_ppapurge ${ppa}
 
 	_purge ${pkgs}
 
-#	rm -f $(_desktop)/gimp.desktop
+
+	echo "PPAを削除します。"
+	_ppapurge ${ppa}
 
 fi
