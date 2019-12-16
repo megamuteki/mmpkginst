@@ -166,11 +166,23 @@ APT
 画像を一括で変換するアプリ
 converseenppa
 ---
+最新版HandBrake動画変換アプリ
+BOTH
+PPA
+動画のフォーマット変換するアプリ
+handbrakeppa
+---
 最新版audacity音声編集アプリ
 BOTH
 PPA
 音声を編集するアプリ
 audacityppa
+---
+最新版DarkTable高機能写真編集アプリ
+BOTH
+PPA
+高機能な写真を編集・加工するアプリ
+darktableppa
 ---
 最新版green-recorder画面録画アプリ
 BOTH
@@ -225,6 +237,12 @@ BOTH
 PPA
 AdobeInDesignのようなDTPレイアウトアプリ
 scribusppa
+---
+最新版LibreOffice グラフィック、ドキュメント、プレゼン アプリ
+BOTH
+APT
+MS-OFFICEのようなグラフィック、ドキュメント、プレゼン アプリアプリ
+libreofficeppa
 ---
 最新版sigil E-PUB エディタ
 BOTH

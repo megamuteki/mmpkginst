@@ -256,6 +256,18 @@ PPA
 ホームページなどにFTPでアップロードするアプリ
 filezillautilppa
 ---
+PlayOnLinuxアプリ
+BOTH
+apt
+Windosアプリケーションを使用するとき。(Wineをインストール済みであることが必要)
+playonlinusutilapt
+---
+最新版PlayOnLinuxアプリ
+BOTH
+PPA
+Windosアプリケーションを使用するとき。(Wineをインストール済みであることが必要)
+playonlinusutilppa
+---
 AppImageLauncher appimageの起動などを管理するアプリ
 BOTH
 DEB

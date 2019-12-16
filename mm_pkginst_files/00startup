@@ -80,7 +80,7 @@ then
 	gitapp="git"
 
 else
-	sudo apt install git -y
+	sudo apt install git svn -y
 
 fi
 

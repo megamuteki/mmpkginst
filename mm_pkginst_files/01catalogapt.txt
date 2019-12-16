@@ -130,6 +130,18 @@ APT
 音声を編集するアプリ
 audacityapt
 ---
+最新版DarkTable高機能写真編集アプリ
+BOTH
+APT
+高機能な写真を編集・加工するアプリ
+darktableapt
+---
+Handbrake動画変換アプリ
+BOTH
+APT
+動画のフォーマット変換するアプリ
+handbrakeapt
+---
 bluefish HTML、テキストエディタ
 BOTH
 APT
@@ -141,6 +153,12 @@ BOTH
 APT
 AdobeInDesignのようなDTPレイアウトアプリ
 scribusapt
+---
+LibreOffice グラフィック、ドキュメント、プレゼン アプリ
+BOTH
+APT
+MS-OFFICEのようなグラフィック、ドキュメント、プレゼン アプリアプリ
+libreofficeapt
 ---
 sigil E-PUB エディタ
 BOTH
