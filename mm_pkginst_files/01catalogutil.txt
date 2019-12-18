@@ -88,10 +88,10 @@ PPA
 TimeMachineのように指定の時間にバックアップする。
 timeshiftutilppa
 ---
-UbuntuRistrictedExtraコーデック、フォント追加、DVD再生設定
+Ubuntu universe・multiverseリポジトリ追加及びRistrictedExtraのコーデック、フォント追加、DVD再生設定
 BOTH
 APT
-Ubuntu用の追加フォント・コーデックインストールとDVD再生設定
+Ubuntu universe・multiverseリポジトリ追加及びRistrictedExtraの追加フォント・コーデックインストール、DVD再生設定
 ubunturistrictutilapt
 ---
 openjdk-8-jdkのインストールと設定
@@ -166,10 +166,10 @@ APT
 KDE NEONで日本語入力が出来なかった時の設定
 fcitxutilapt
 ---
-KDE NEON DolphineRootActionServicemenuインストール（必要に応じて）
+KDE NEON Dolphin RootAction Servicemenuインストール（必要に応じて）
 NEON
 SRC
-Dolphinでroot actionをついかするとき。
+Dolphinでroot actionを追加するとき。
 rootactionutilapt
 ---
 BackInTimeバックアップ、復元アプリ
