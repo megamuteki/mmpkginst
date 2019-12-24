@@ -5,7 +5,7 @@ aptpkgs="dummy"
 targz="rootactions_servicemenu_2.9.1.tar.gz"
 tardir="rootactions_servicemenu_2.9.1"
 kde5data="$(kf5-config --path data | cut -d: -f1)"
-file=$kde5data/kservices5/ServiceMenus/rootactions-servicemenu.pl
+file="/usr/local/bin/rootactions-servicemenu.pl"
 
 datadir=$(cd $(dirname "$0") && pwd)
 
@@ -40,7 +40,7 @@ _installrootaction()
 
     cd $tardir
     sudo ./install.sh
-
+	sudo cp  ./Root_Actions_2.9.1/rootactions-servicemenu.pl  /usr/local/bin/
     cd /tmp
     rm -rf $tardir
     rm -f $targz
@@ -79,7 +79,7 @@ _uninstallrootaction()
 
     cd $tardir
     sudo ./deinstall.sh
-
+	sudo rm -f  /usr/local/bin/rootactions-servicemenu.pl
     cd /tmp
     rm -rf $tardir
     rm -f $targz
