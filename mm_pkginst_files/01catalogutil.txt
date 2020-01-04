@@ -4,11 +4,17 @@ APT
 不足しているプリンタドライバの補完を行います。
 printer-driver-all
 ---
-コーデックセット（注意補足あり）
+コーデックセット（アンインストール注意）
 BOTH
 APT
 注意：コーデックは、アプリからの依存が多いので、よくわからない場合は、使用しないようにしてください。
 codec
+---
+PlusAudio用LDACコーデック（アンインストール時注意）
+BOTH
+PPA
+注意：コーデックは、アプリからの依存が多いので、よくわからない場合は、使用しないようにしてください。
+ldacutilppa
 ---
 ClamTkウイルススキャナ
 BOTH
@@ -69,6 +75,12 @@ BOTH
 APT
 カーネルをLowLatencyに変更する。
 lowlatencyutilapt
+---
+LowLatencyKernel+Audio
+BOTH
+APT
+カーネルをLowLatency+UbuntuStudioのAudioを追加
+lowlatencyaudioutilapt
 ---
 BleachBitシステムクリーナ
 BOTH
@@ -255,6 +267,18 @@ BOTH
 PPA
 ホームページなどにFTPでアップロードするアプリ
 filezillautilppa
+---
+krusader 高機能ファイルマネージャ
+BOTH
+APT
+フォルダー操作、ターミナル操作なども統合された多機能ファイルマージャー
+krusaderutilapt
+---
+最新版krusader 高機能ファイルマネージャ
+BOTH
+PPA
+フォルダー操作、ターミナル操作なども統合された多機能ファイルマージャー
+krusaderutilppa
 ---
 PlayOnLinuxアプリ
 BOTH

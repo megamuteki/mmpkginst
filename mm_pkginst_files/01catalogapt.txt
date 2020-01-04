@@ -136,6 +136,12 @@ APT
 音声を編集するアプリ
 audacityapt
 ---
+soundconverter音声変換アプリ
+BOTH
+APT
+音声を変換するアプリ
+soundconverterapt
+---
 最新版DarkTable高機能写真編集アプリ
 BOTH
 APT
