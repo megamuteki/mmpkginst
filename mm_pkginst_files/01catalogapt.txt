@@ -136,6 +136,12 @@ APT
 音声を編集するアプリ
 audacityapt
 ---
+audacious音声再生アプリ
+BOTH
+APT
+音声を再生するアプリ
+audaciousapt
+---
 soundconverter音声変換アプリ
 BOTH
 APT

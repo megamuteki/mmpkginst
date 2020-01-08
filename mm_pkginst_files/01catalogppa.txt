@@ -184,6 +184,12 @@ PPA
 音声を編集するアプリ
 audacityppa
 ---
+最新版audacious音声再生アプリ
+BOTH
+PPA
+音声を再生するアプリ
+audaciousppa
+---
 最新版soundconverter音声変換アプリ
 BOTH
 PPA

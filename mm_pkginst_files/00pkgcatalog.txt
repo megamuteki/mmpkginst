@@ -100,7 +100,7 @@ PPA
 TimeMachineのように指定の時間にバックアップする。
 timeshiftutilppa
 ---
-Ubuntu universe・multiverseリポジトリ追加及びRistrictedExtraのコーデック、フォント追加、DVD再生設定
+Ubuntu universe・multiverse・RistrictedExtra追加、DVD設定
 BOTH
 APT
 Ubuntu universe・multiverseリポジトリ追加及びRistrictedExtraの追加フォント・コーデックインストール、DVD再生設定
@@ -256,6 +256,18 @@ PPA
 リモートデスクトップを操作するフロントエンド
 remminautilppa
 ---
+transmission torrent クライアント
+BOTH
+APT
+使いやすいトレントクライアント
+trannsmissionapt
+---
+最新版transmission torrent クライアント
+BOTH
+PPA
+リモートデスクトップを操作するフロントエンド
+trannsmissionppa
+---
 filezilla FTP アプリ
 BOTH
 APT
@@ -279,6 +291,18 @@ BOTH
 PPA
 フォルダー操作、ターミナル操作なども統合された多機能ファイルマージャー
 krusaderutilppa
+---
+autokey 高機能キーボード・ショートカットツール
+BOTH
+APT
+高機能なキーボード・ショートカットとスクリプト自動化
+autokeyutilapt
+---
+最新版autokey 高機能キーボード・ショートカットツール
+BOTH
+PIP
+高機能なキーボード・ショートカットとスクリプト自動化
+autokeyutilppa
 ---
 PlayOnLinuxアプリ
 BOTH
