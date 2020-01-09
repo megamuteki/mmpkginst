@@ -1,0 +1,63 @@
+#!/bin/bash
+
+ppa="kxstudio-debian/kxstudio"
+pkgs1="kxstudio-repos"
+pkgs2="kxstudio-meta-all" 
+pkgs3="kxstudio-recommended-all" 
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+
+# Check
+if [ "$1" == "-c" ] ; then
+	if [ $(_check ${pkgs1}) == "y" -o $(_check ${pkgs2}) == "y" -o $(_check ${pkgs3}) == "y" ]  &&  [ $(_ppacheck ${ppa}) == "y" ] ; then
+		echo TRUE
+	else	
+		echo FALSE 
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+	if [ $(_check ${pkgs1}) == "y" -o $(_check ${pkgs2}) == "y" -o $(_check ${pkgs3}) == "y" ]  &&  [ $(_ppacheck ${ppa}) == "n" ] ; then
+
+		_err "既に他のバージョンが存在します。他のバージョンのアンインストールが必要です。"
+	else
+
+	_ppainstall ${ppa} 
+	_install ${pkgs1}
+	_install ${pkgs2}
+	_install ${pkgs3}
+
+	fi
+
+
+
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+    echo "メタパッケージをアンインストールします。"
+    echo "システムの構成に大きな影響があります。"
+    echo "アンインストールの過程で起きることをメモすることをお勧めします"
+	echo "影響が予測できない場合は、そのままにしておくことをおすすめします。"
+
+	#Yes No の質問をします。
+	if _ask_yes_no "kx-studioメタパッケージをアンインストールしますか？"; then
+
+	# 「Yes」の時の処理
+	_purge ${pkgs1}
+	_purge ${pkgs2}
+	_purge ${pkgs3}
+	
+	else
+	#「No」の時の処理
+		_log "そのままにします。"
+	fi
+
+
+	echo "PPAを削除します。"
+	_ppapurge ${ppa}
+
+
+fi

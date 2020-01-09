@@ -1,9 +1,8 @@
 #!/bin/bash
 
-ppa="dummy"
+ppa="sporkwitch/autokey"
 pkgs1="autokey-gtk"
 pkgs2="autokey-qt"
-devpkgs="python3-dbus python3-xlib python3-pyinotify wmctrl python3-gi gir1.2-gtk-3.0 gir1.2-gtksource-3.0 gir1.2-appindicator3-0.1 gir1.2-glib-2.0 gir1.2-notify-0.7 zenity python3-pyqt5 python3-pyqt5.qsci python3-pyqt5.qtsvg kdialog  pyqt5-dev-tools"
 
 datadir=$(cd $(dirname "$0") && pwd)
 
@@ -12,66 +11,35 @@ datadir=$(cd $(dirname "$0") && pwd)
 # Check
 if [ "$1" == "-c" ] ; then
 
-	file1="/usr/local/bin/autokey-qt"
-	if  [ ! -e $file1 ] ; then
+	if  [ $(_check ${pkgs1}) == "y" -o $(_check ${pkgs2}) == "y" ]   &&  [ $(_ppacheck ${ppa}) == "y" ] ; then
 		echo TRUE
 	else
 		echo FALSE
-
 	fi
 	
 # Install
 elif [ "$1" == "-i" ] ; then
 
-_intallautokey()
-{
-    
-	_install ${devpkgs}
-    sudo pip3 install  git+https://github.com/autokey/autokey    
 
-
-}
-
-
-
-
-	if [[ $(_check ${pkgs1}) == "y" ] || [ $(_check ${pkgs2}) == "y" ]] ; then
+	if  [ $(_check ${pkgs1}) == "y" -o $(_check ${pkgs2}) == "y" ]   &&  [ $(_ppacheck ${ppa}) == "n" ] ; then
 		_err "既に他のバージョンが存在します。他のバージョンのアンインストールが必要です。"
 
-	elif _installautokey ; then
-    	_log "autokeyのインストールに成功しました。"
-    
-    else 
-        _err "autokeyのインストールに失敗しました。"
-
+	else
+	_ppainstall ${ppa}
+	_install ${pkgs1}
+	_install ${pkgs2}
+	
 	fi
-
-
-	_log "一時ファイルを除去しています..."
-
-
 
 	
 # Purge
 elif [ "$1" == "-p" ] ; then
 
-    _uninstallautokey()
-    {
-        sudo rm -f /usr/local/bin/autokey-qt
-        sudo rm -f /usr/local/bin/autokey-gtk
-        
 
-    }
+	_purge ${pkgs1}
+	_purge ${pkgs2}
 
-
-	if _uninstallautokey  ; then
-		_log "autokeyrのアンインストールに成功しました。"
-	else
-		_err "autokeyのアンインストールに失敗しました。"
-
-	fi
-
-	_log "一時ファイルを除去しています..."
-
+	echo "PPAを削除します。"
+	_ppapurge ${ppa}
 
 fi

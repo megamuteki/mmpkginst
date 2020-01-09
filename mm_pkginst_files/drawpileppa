@@ -67,7 +67,7 @@ elif [ "$1" == "-p" ] ; then
 
 _uninstalldrawpile()
 {
-sudo find $HOME/.config -name "*drawpile*" | xargs rm -rf
+sudo  $HOME/.config -name "*drawpile*" | xargs rm -rf
 sudo find $HOME/.local -name "*drawpile*" | xargs rm -rf	
 sudo find /usr/local/ -name "*drawpile*" | xargs sudo rm -rf
 sudo find /usr/share/ -name "*drawpile*" | xargs sudo rm -rf

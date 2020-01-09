@@ -76,11 +76,17 @@ APT
 カーネルをLowLatencyに変更する。
 lowlatencyutilapt
 ---
-LowLatencyKernel+Audio
+LowLatencyKernel+Audio（注意：JACK音声出力使用）
 BOTH
 APT
-カーネルをLowLatency+UbuntuStudioのAudioを追加
+カーネルをLowLatency+UbuntuStudioのJACKを利用したAudioを追加（注意：JACKの操作が理解できることが必要）
 lowlatencyaudioutilapt
+---
+kx-studio meta package オーディオ強化（注意：JACK音声出力使用。）
+BOTH
+APT
+KX-STUDIOを利用してAudioを強化（注意：JACKの操作が理解できることが必要）
+kxstudioutilppa
 ---
 BleachBitシステムクリーナ
 BOTH
@@ -103,7 +109,7 @@ timeshiftutilppa
 Ubuntu universe・multiverse・RistrictedExtra追加、DVD設定
 BOTH
 APT
-Ubuntu universe・multiverseリポジトリ追加及びRistrictedExtraの追加フォント・コーデックインストール、DVD再生設定
+Ubuntu universe・multivers・RistrictedExtra追加フォント・コーデックインストール、DVD再生設定
 ubunturistrictutilapt
 ---
 openjdk-8-jdkのインストールと設定
@@ -300,7 +306,7 @@ autokeyutilapt
 ---
 最新版autokey 高機能キーボード・ショートカットツール
 BOTH
-PIP
+PPA
 高機能なキーボード・ショートカットとスクリプト自動化
 autokeyutilppa
 ---
