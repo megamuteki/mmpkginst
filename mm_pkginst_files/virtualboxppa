@@ -1,0 +1,49 @@
+#!/bin/bash
+
+datadir=$(cd $(dirname "$0") && pwd)
+. ${datadir}/00common.fnc
+
+
+ppa="dummy"
+pkgs="virtualbox-6.0"
+devpkgs="dkms"
+
+# Check
+if [ "$1" == "-c" ] ; then
+	if [ $(_check ${pkgs}) == "y" ] ; then
+		echo TRUE
+	else	
+		echo FALSE 
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+_installvirtualbox()
+
+{
+    echo "oracleのpgpkeyを取得します"
+    wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+    wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
+    echo "oracleのリポジトリを追加します"
+    sudo add-apt-repository "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian bionic contrib"
+    sudo apt update
+    sudo apt install virtualbox-6.0 dkms
+
+}
+
+	
+	if _installvirtualbox ; then
+		_log "virtuslboxのインストールに成功しました。"
+	else
+		_err "virtualboxのインストールに失敗しました。"
+
+	fi
+		
+
+# Purge
+elif [ "$1" == "-p" ] ; then
+	_purge ${pkgs}
+    sudo add-apt-repository  --remove "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian bionic contrib"
+
+fi

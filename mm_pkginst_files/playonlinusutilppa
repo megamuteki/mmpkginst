@@ -23,7 +23,7 @@ elif [ "$1" == "-i" ] ; then
 _preinstallplayonlinux()
 
 {
-    ehoc "リポジトリを追加します。時間がかかります。"
+    echo "リポジトリを追加します。時間がかかります。"
     wget -q "http://deb.playonlinux.com/public.gpg" -O- | sudo apt-key add -
     sudo wget http://deb.playonlinux.com/playonlinux_bionic.list -O $srclist
     sudo apt-get update  
@@ -36,10 +36,10 @@ _installpolmo ()
     svn checkout https://github.com/megamuteki/misc/trunk/wine/PlayOnLinux/POL
     cd /tmp/POL
 
-	if [ -e /usr/share/playonlinux/lang/locale/ja/LC_MESSAGES/pol.mo] ; then
+	if [ -f /usr/share/playonlinux/lang/locale/ja/LC_MESSAGES/pol.mo  ]  ; then
     	sudo mv /usr/share/playonlinux/lang/locale/ja/LC_MESSAGES/pol.mo  /usr/share/playonlinux/lang/locale/ja/LC_MESSAGES/pol.mo.bk
     	sudo cp pol.mo  /usr/share/playonlinux/lang/locale/ja/LC_MESSAGES/
-	elif [ -e /usr/share/locale/ja/LC_MESSAGES/pol.mo]  ; then
+	elif [ -f /usr/share/locale/ja/LC_MESSAGES/pol.mo ]  ; then
 	    sudo mv/usr/share/locale/ja/LC_MESSAGES/pol.mo  /usr/share/locale/ja/LC_MESSAGES/pol.mo,bk
     	sudo cp pol.mo  /usr/share/locale/ja/LC_MESSAGES/pol.mo
 	fi

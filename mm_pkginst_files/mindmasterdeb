@@ -1,0 +1,53 @@
+#!/bin/bash
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+
+ppa="dummy"
+pkgs="mindmaster"
+
+# Check
+if [ "$1" == "-c" ] ; then
+	if [ $(_check ${pkgs}) == "y" ]  &&  [ $(_ppacheck ${ppa}) == "n" ] ; then
+		echo TRUE
+	else	
+		echo FALSE 
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+	echo "mindmasterをダウンロードしています。"
+	cd /tmp
+	deb="mindmaster-7-amd64.deb"
+	
+
+	_log " https://www.edrawsoft.com/archives/${deb}をだうん"
+	if wget -c https://www.edrawsoft.com/archives/${deb} ; then
+		_log "mindmasterのダウンロードに成功しました。"
+	else
+		_err "mindmasterのダウンロードに失敗しました。"
+	
+	fi
+	
+	if sudo dpkg -i ${deb} ; then
+		_log "mindmasterのインストールに成功しました。"
+	else
+		_err "mindmasterのインストールに失敗しました。"
+
+	fi
+		
+	_log "一時ファイルを除去しています..."
+	rm -f ${deb}
+
+# Purge
+elif [ "$1" == "-p" ] ; then
+	_purge ${pkgs}
+    sudo rm -rf /opt/mindmaster/
+    sudo rm -f /usr/share/icons/mindmaster.png
+    sudo rm -f /usr/share/applications/mindmaster.desktop
+    sudo rm -f /usr/share/mime/packages/mindmaster.xml
+    sudo rm -f /usr/share/icons/gnome/scalable/mimetypes/eddx.svg
+	_log "アンインストールが終了しました。..."
+
+fi

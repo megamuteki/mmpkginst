@@ -1,0 +1,41 @@
+#!/bin/bash
+
+ppa="dummy"
+pkgs="xnconvert"
+debs="http://download.xnview.com/XnConvert-linux-x64.deb"
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+
+# Check
+
+if [ "$1" == "-c" ] ; then
+	if [ $(_check ${pkgs}) == "y" ]  ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+
+	cd /tmp
+
+	if  _debinstall ${debs}; then
+		_log "$pkgsインストールに成功しました。"
+	else
+		_err "$pkgsのインストールに失敗しました。"
+	
+	fi
+
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+	_purge ${pkgs}
+
+fi
+

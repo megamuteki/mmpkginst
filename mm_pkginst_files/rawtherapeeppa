@@ -1,7 +1,9 @@
 #!/bin/bash
 
-ppa="rvm/smplayer"
-pkgs="smtube smplayer smplayer-themes smplayer-skins "
+ppa="dhor/myway"
+pkgs="rawtherapee"
+
+
 
 datadir=$(cd $(dirname "$0") && pwd)
 
@@ -29,16 +31,15 @@ elif [ "$1" == "-i" ] ; then
 	
 	fi
 
-
 	
 # Purge
 elif [ "$1" == "-p" ] ; then
-
 
 	_purge ${pkgs}
 
 
 	echo "PPAを削除します。"
 	_ppapurge ${ppa}
+
 
 fi

@@ -22,10 +22,10 @@ elif [ "$1" == "-i" ] ; then
 	{
 		echo "AppImageLauncherをダウンロードしています。"
 		cd /tmp
-		deb="appimagelauncher_2.1.0-beta-1-travis895.f5b6568.bionic_amd64.deb"
+		deb="appimagelauncher_2.1.1-travis931.f6d5926.bionic_amd64.deb"
 		_log "debをダウンロードします。"
 
-		if wget -c https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.1.0-beta-1/${deb} ; then
+		if wget -c https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.1.1/${deb} ; then
 			_log "$debのダウンロードに成功しました。"
 		else
 			_err "$debのダウンロードに失敗しました。"

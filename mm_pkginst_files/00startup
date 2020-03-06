@@ -71,7 +71,17 @@ then
 	gitapp="git"
 
 else
-	sudo apt install git svn -y
+	sudo apt install git git-svn subversion -y
+
+fi
+
+#git-svnの設定
+if [ $(dpkg-query -W -f='${Status}' git-svn  2>/dev/null | grep -c "ok installed") -eq 1 ] || [ $(dpkg-query -W -f='${Status}' subversion  2>/dev/null | grep -c "ok installed") -eq 1 ] ;
+then
+	gitsvnapp="git-svn"
+
+else
+	sudo apt install git-svn subversion -y
 
 fi
 

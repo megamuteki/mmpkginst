@@ -298,6 +298,12 @@ PPA
 フォルダー操作、ターミナル操作なども統合された多機能ファイルマージャー
 krusaderutilppa
 ---
+youtube-dl youtube cli ダウンローダー
+BOTH
+SRC
+CLIでYoutubeリンクから動画をダウンロードするスクリプト
+youtube-dlutilppa
+---
 autokey 高機能キーボード・ショートカットツール
 BOTH
 APT
@@ -315,6 +321,18 @@ BOTH
 apt
 Windosアプリケーションを使用するとき。(Wineをインストール済みであることが必要)
 playonlinusutilapt
+---
+VirtualBOXアプリ
+BOTH
+apt
+OSの仮想化環境ソフト
+virtualboxapt
+---
+最新版VirtualBOXアプリ
+BOTH
+DEB
+OSの仮想化環境ソフト
+virtualboxppa
 ---
 最新版PlayOnLinuxアプリ
 BOTH

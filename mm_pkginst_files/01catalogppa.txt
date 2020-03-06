@@ -40,6 +40,12 @@ PPA
 画像ファイルのトリミング、色調整などが軽快に出来る。
 nomacsppa
 ---
+開発版Digikam画像処理アプリ(調整中)
+BOTH
+APT
+PhotoShopライクな画像処理
+digikamppa
+---
 最新版Blander
 BOTH
 PPA
@@ -51,6 +57,18 @@ BOTH
 DEB
 プロジェクタを利用した黒板をペンタブで利用できるアプリをインストールします。
 openboarddeb
+---
+MindMaster マインドマップ　
+BOTH
+DEB
+MindMapアプリをインストールします。
+mindmasterdeb
+---
+OstoryBook　ノベル作成ツール　
+BOTH
+DEB
+ostorybook ノベル作成ツールをインストールします。
+ostorybookppa
 ---
 DrawPileペンタブを利用して絵チャット出来るアプリ
 BOTH
@@ -75,6 +93,12 @@ BOTH
 PPA
 機械設計などの３Dモデリングソフト。
 freecadppa
+---
+最新版LibreCAD2Dモデリングソフト
+BOTH
+PPA
+軽量で直感的に操作できる2Dモデリングソフト。
+librecadppa
 ---
 最新版MakeHuman３Dモデリングアプリ
 BOTH
@@ -166,6 +190,12 @@ PPA
 高機能な画像変換、トリミング、効果などを行うアプリ
 xnviewppa
 ---
+XnConvert画像ファイル形式変換アプリ
+BOTH
+PPA
+画像ファイルの形式変換を行うアプリ
+xnconvertppa
+---
 最新版converseen画像一括変換アプリ
 BOTH
 APT
@@ -184,6 +214,24 @@ PPA
 音声を編集するアプリ
 audacityppa
 ---
+最新版musescore作曲アプリ
+BOTH
+PPA
+楽譜、作曲、MIDIデータを編集するアプリ
+musescoreppa
+---
+PPA版ardour音楽編集アプリ
+BOTH
+PPA
+音楽を編集するアプリ
+ardourppa
+---
+最新版VLC動画プレーヤーアプリ
+BOTH
+PPA
+高機能な動画プレーヤーアプリ
+vlcppa
+---
 最新版audacious音声再生アプリ
 BOTH
 PPA
@@ -201,6 +249,12 @@ BOTH
 PPA
 高機能な写真を編集・加工するアプリ
 darktableppa
+---
+最新版高機能写真編集アプリ
+BOTH
+PPA
+高機能な写真を編集・加工するアプリ
+rawtherapeeppa
 ---
 最新版green-recorder画面録画アプリ
 BOTH
@@ -291,6 +345,18 @@ BOTH
 DEB
 高機能なエディタgitとの連携に便利
 vscodeppa
+---
+DEB版 manuskript 原稿作成支援ツール
+BOTH
+DEB
+電子ジャーナル作成アプリ
+manuskriptppa
+---
+pdfsam PDF 編集アプリ
+BOTH
+DEB
+pdf編集用ツール
+pdfsamppa
 ---
 pdfarranger PDF 編集アプリ
 BOTH

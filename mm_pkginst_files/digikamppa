@@ -1,0 +1,111 @@
+#!/bin/bash
+
+ppa="dummy"
+pkgs="digikam"
+devpkgs="cmake qtbase5-dev bison cmake debhelper extra-cmake-modules flex gphoto2 help2man \
+libboost-graph-dev libeigen3-dev libexiv2-dev libexpat1-dev libglib2.0-dev libgphoto2-dev \
+libjpeg-dev libkf5doctools-dev libkf5filemetadata-dev libkf5kipi-dev libkf5notifications-dev \
+libkf5notifyconfig-dev libkf5sane-dev libkf5threadweaver-dev liblcms2-dev liblensfun-dev liblqr-1-0-dev \
+libmarble-dev libopencv-dev libpng-dev libqt5svg5-dev libqt5opengl5-dev libqt5svg5-dev libqt5webkit5-dev \
+libqt5x11extras5-dev libqt5xmlpatterns5-dev libqtav-dev libtiff-dev libusb-1.0-0-dev libxml2-dev libxslt1-dev \
+pkg-config pkg-kde-tools qtbase5-dev-tools qtmultimedia5-dev  qtwebengine5-dev exiv2  qt5-default"
+
+datadir=$(cd $(dirname "$0") && pwd)
+. ${datadir}/00common.fnc
+
+# Check
+if [ "$1" == "-c" ] ; then
+	if [ -e /bin/pencil2d ] && [ $(_check ${pkgs}) == "n" ] ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+_installpencil2d()
+{
+	INSTDIR="/tmp"
+	cd $INSTDIR
+	CORES=$(grep processor /proc/cpuinfo | wc -l)
+
+	git clone https://invent.kde.org/kde/digikam.git $INSTDIR/digikam
+	cd $INSTDIR/digikam
+	sudo ./bootstrap.linux
+	qmake
+	mkdir build; pushd build; qmake -r -spec linux-g++-64 CONFIG+=debug ..; popd
+	make -C build
+	cd $INSTDIR/pencil/build/
+	sudo make install
+	sudo cp /share/applications/pencil2d.desktop /usr/share/applications/pencil2d.desktop
+	sudo chmod +x /usr/share/applications/pencil2d.desktop
+	sudo cp /share/icons/hicolor/256x256/apps/pencil2d.png /usr/share/pixmaps/pencil2d.png	
+	rm -rf $INSTDIR/pencil
+	
+}
+
+
+	if [ $(_check ${pkgs}) == "y" ]  ; then
+		_err "既に他のバージョンが存在します。他のバージョンのアンインストールが必要です。"
+	else
+		read -n1 -p "開発版と必要なライブラリもインストールします。よろしいですか? (y/N): " yn
+		if [[ $yn = [yY] ]]; then
+			echo "インストールを継続します。"
+            echo "必要なライブラリをインストールします。時間がかかります"
+            _install ${devpkgs}
+            _log "必要なライブラリのインストールが終了しました。"            
+			_installpencil2d | grep -e Error -e Fatal  -e NOTE  >> /tmp/mm_pkginst.log
+
+		else
+			echo "終了します。"
+			exit
+		fi
+
+	fi
+		
+	if [ -e /bin/pencil2d ] ; then
+		_log "pencil2d(GitMaster)のインストールに成功しました。"
+	else
+		_err "pencil2d(GitMaster)のインストールに失敗しました。フォルダが残ったかもしれませせん。"
+	fi
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+
+_uninstallpencil2d()
+{
+	sudo rm -f /bin/pencil2d
+	sudo rm -f /share/applications/pencil2d.desktop
+	sudo rm -f /share/bash-completion/completions/pencil2d
+	sudo rm -f /share/icons/hicolor/256x256/apps/pencil2d.png
+	sudo rm -f /share/mime/packages/pencil2d.xml
+	sudo rm -f /share/zsh/site-functions/_pencil2d
+	sudo rm -f /usr/share/app-install/desktop/pencil2d:pencil2d.desktop
+	sudo rm -f /usr/share/app-install/icons/pencil2d.png
+	sudo rm -f /usr/share/pixmaps/pencil2d.png
+	rm -rf $HOME/.config/pencil
+	echo 1
+
+}
+       
+    
+	if [ $(_uninstallpencil2d) ] ; then
+		_log "Pencil2d(GitMaster)のアンインストールに成功しました。"
+	else
+		_err "Pencil2d(GitMaster)のアンインストールに失敗したかフォルダが残ったかもしれませせん。"
+	fi
+
+
+fi
+
+
+# MakeFileのインストールディレクトリ
+# /share/bash-completion/completions/pencil2d
+# /share/zsh/site-functions/_pencil2d
+# /bin/pencil2d
+# /share/mime/packages/pencil2d.xml
+# /share/applications/pencil2d.desktop
+# /share/icons/hicolor/256x256/apps/pencil2d.png
