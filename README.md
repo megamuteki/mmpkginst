@@ -46,11 +46,27 @@ leafpad, thunar, yad, git,svn, build-essential, nfdupes, ppa-purge
 
 ## 使用方法
 
-git clone https://github.com/megamuteki/mmpkginst.git
+$git clone https://github.com/megamuteki/mmpkginst.git
 
-cd  ./mmpkginst
+または、
 
-mmpkginstlocal.desktopをダブルクリックしてください。
+$wget https://github.com/megamuteki/mmpkginst/archive/master.zip -O ./mmpkginst.zip ;  unzip ./mmpkginst.zip ; rm ./mmpkginst.zip
+
+でダウンロードします。
+
+
+
+ダウンロードしましたら、
+
+bash ./mm_pkginst.sh
+
+または
+
+mmpkginstlocal
+
+をダブルクリックしてください。
+
+
 
 または
 
