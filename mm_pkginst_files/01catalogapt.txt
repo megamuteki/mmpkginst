@@ -28,6 +28,12 @@ APT
 画像ファイルのトリミング、色調整などが軽快に出来る。
 shotwellapt
 ---
+posterazorポスター作成アプリ
+BOTH
+APT
+posterazor画像を分割して、大きなサイズに分割印刷するあぷり
+posterazorapt
+---
 nomacs画像変換・ビューワ
 BOTH
 APT

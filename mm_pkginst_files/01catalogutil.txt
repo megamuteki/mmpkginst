@@ -118,6 +118,12 @@ PPA
 ArtOfIllusion等のOpenJDK8アプリを使用する時。複数ある場合はJDK８に設定する。
 jdk8utilppa
 ---
+Brave広告ブロック型ブラウザ
+BOTH
+DEB
+リモートでアプリの共有をしたり操作をしたりするツール。（商用：有料）
+braveutilppa
+---
 TeamViwerリモートコラボレーションアプリ
 BOTH
 DEB

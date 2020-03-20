@@ -1,0 +1,78 @@
+#!/bin/bash
+
+ppa=" dummy"
+pkgs="brave-browser"
+devpkgs="apt-transport-https curl "
+
+datadir=$(cd $(dirname "$0") && pwd)
+
+. ${datadir}/00common.fnc
+	
+# Check
+if [ "$1" == "-c" ] ; then
+
+    if [ $(_check ${pkgs}) == "y" ]  ; then
+		echo TRUE
+	else	
+		echo FALSE 
+	fi
+	
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+_installbrave()
+{
+
+cd /tmp
+
+curl -s https://brave-browser-apt-release.s3.brave.com/brave-core.asc | sudo apt-key --keyring /etc/apt/trusted.gpg.d/brave-browser-release.gpg add -
+
+echo "deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+
+sudo apt update
+
+sudo apt install brave-browser
+
+}
+
+
+
+#install ${devpkgs}
+echo "インストールに必要なライブラリをインストールします。少し、時間がかかります。"
+	_install ${devpkgs}
+
+# Install hidviz
+
+	if _installbrave ; then
+		_log "$pkgsのインストールに成功しました。"
+	else
+		_err "$pkgsのインストールに失敗しました。フォルダが残ったかもしれませせん。"
+	fi
+
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+_uninstallbrave()
+{
+
+cd /tmp
+sudo apt remove brave-browser
+sudo apt purge brave-browser
+rm -rf ~/.config/BraveSoftware/Brave-Browser/
+sudo rm  -f  /etc/apt/sources.list.d/brave-browser-release.list
+
+}
+       
+    
+	if  _uninstallbrave ; then
+		_log "$pkgsのアンインストールに成功しました。"
+	else
+		_err "$pkgsのアンインストールに失敗しました。フォルダが残ったかもしれませせん。"
+	fi
+
+
+
+fi

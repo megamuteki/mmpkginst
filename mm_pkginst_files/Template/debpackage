@@ -1,0 +1,152 @@
+#!/bin/bash
+
+ppa="dummy"
+pkgs="synfig synfigstudio"
+
+datadir=$(cd $(dirname "$0") && pwd)
+instdir="/home/$(whoami)"
+
+. ${datadir}/00common.fnc
+
+# Check
+if [ "$1" == "-c" ] ; then
+	if [ -e $instdir/synfig.git/_debug/build/bin/synfigstudio ] ; then
+		echo TRUE
+	else
+		echo FALSE
+	fi
+	
+# Install
+elif [ "$1" == "-i" ] ; then
+
+
+
+
+
+	if [ -d  $instdir/synfig.git  ] ; then
+		rm -rf $instdir/synfig.git
+	fi
+
+
+	git clone https://github.com/synfig/synfig.git $instdir/synfig.git
+	cd $instdir/synfig.git
+	bash   $instdir/synfig.git/1-setup-linux-native.sh
+	bash   $instdir/synfig.git/2-build-debug.sh
+
+
+
+	echo "実行ファイルをパッケージにまとめています..."
+	cd  $instdir/synfig.git/_debug/build/
+	
+	_synfigcopy()
+	{
+		sudo mkdir -p  /tmp/synfig_1.5.0_amd64/usr
+		sudo cp -ar ./bin /tmp/synfig_1.5.0_amd64/usr/
+		sudo cp -ar ./etc /tmp/synfig_1.5.0_amd64/usr/
+		sudo cp -ar ./include /tmp/synfig_1.5.0_amd64/usr/
+		sudo cp -ar ./lib /tmp/synfig_1.5.0_amd64/usr/
+		sudo cp -ar ./share /tmp/synfig_1.5.0_amd64/usr/
+	}	
+	
+	if _synfigcopy ; then
+		_log "実行ファイルの移動に成功しました。"
+	else
+		_err "実行ファイルの移動に失敗しました。"
+		return 1
+	fi
+
+
+#パッケージ化してからインストール
+_mkpkginst()
+{
+	
+		sudo mkdir /tmp/synfig_1.5.0_amd64/DEBIAN
+		sudo touch /tmp/synfig_1.5.0_amd64/DEBIAN/control
+	
+		echo "Package: synfig
+Version: 1.5.0
+Architecture: amd64
+Maintainer: Masaru Hirano <mhirano@neoblast.co.jp>
+Installed-Size: $(du -c /tmp/synfig_1.5.0_amd64/usr | tail -n 1 | awk '{print $1}')
+Depends: 
+Section: graphics
+Priority: optional
+Description: Synfig Studio without Debug Symbol
+" | sudo tee /tmp/synfig_1.5.0_amd64/DEBIAN/control
+		
+		cd /tmp
+		if sudo dpkg -b synfig_1.5.0_amd64 ; then
+			_log "パッケージ化に成功しました。"
+		else
+			_err "パッケージ化に失敗しました。"
+			return 1
+		fi
+		
+		if sudo dpkg -i synfig_1.5.0_amd64.deb ; then
+			_log "インストールに成功しました。"
+		else
+			_err "インストールに失敗しました。"
+			return 1
+		fi
+}
+		
+		_mkpkginst
+		
+		_log "一時ファイルを除去しています..."
+		cd /tmp
+		rm -rf synfig_1.5.0_amd64
+		rm -f  synfig_1.5.0_amd64.deb
+
+
+	if [ $(_check ${pkgs}) == "y" ]  ; then
+		_err "既に他のバージョンが存在します。他のバージョンのアンインストールが必要です。"
+	else
+		read -n1 -p "ホームディレクトリに開発版をインストールします。よろしいですか? (y/N): " yn
+		if [[ $yn = [yY] ]]; then
+			echo "インストールを継続します。"
+
+			_installsynfigstudio | grep -e Error -e Fatal  -e NOTE  >> /tmp/mm_pkginst.log
+
+		else
+			echo "終了します。"
+			exit
+		fi
+
+	fi
+		
+	if [ -e $instdir/synfig.git/_debug/build/bin/synfigstudio ] ; then
+		_log "synfigstudio(GitMaster)のインストールに成功しました。"
+	else
+		_err "synfigstudio(GitMaster)のインストールに失敗しました。フォルダが残ったかもしれませせん。"
+	fi
+
+
+
+
+
+
+	
+# Purge
+elif [ "$1" == "-p" ] ; then
+
+
+_uninstallsynfigstudio()
+{
+	sudo rm -rf  $instdir/synfig.git/
+	sudo rm -f  /usr/share/applications/synfigstudiogit.desktop
+	rm -rf  $instdir/.config/synfig
+	rm -rf  $instdir/.synfig
+	
+	echo 1
+
+}
+       
+    
+	if [ $(_uninstallsynfigstudio) ] ; then
+		_log "SynfigStudio(GitMaster)のアンインストールに成功しました。"
+	else
+		_err "SynfigStudio(GitMaster)のアンインストールに失敗したかフォルダが残ったかもしれませせん。"
+	fi
+
+
+fi
