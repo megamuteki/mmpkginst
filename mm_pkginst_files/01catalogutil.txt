@@ -136,6 +136,12 @@ APT
 CD/DVDイメージライタ。音楽・動画・データのCD/DVDを作成します。
 braseroutilapt
 ---
+Flacon オーディオファイルコンバータ
+BOTH
+APT
+Flacファイルの分割、変換を行います。
+flaconutilppa
+---
 Mint標準MintStickのUSBイメージライタ
 MINT
 APT
@@ -309,6 +315,12 @@ BOTH
 SRC
 CLIでYoutubeリンクから動画をダウンロードするスクリプト
 youtube-dlutilppa
+---
+clipgrab  ビデオ ダウンローダー
+BOTH
+PPA
+Youtube,Dailymotion,Vimeoリンクから動画をダウンロードするスクリプト
+clipgrubutilppa
 ---
 autokey 高機能キーボード・ショートカットツール
 BOTH

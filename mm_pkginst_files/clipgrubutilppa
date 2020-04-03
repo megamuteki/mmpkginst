@@ -1,7 +1,7 @@
 #!/bin/bash
 
-ppa="yannubuntu/boot-repair"
-pkgs="boot-repair"
+ppa="clipgrab-team/ppa"
+pkgs="clipgrab"
 
 
 datadir=$(cd $(dirname "$0") && pwd)
@@ -34,14 +34,10 @@ elif [ "$1" == "-i" ] ; then
 # Purge
 elif [ "$1" == "-p" ] ; then
 
+	echo "PPAを削除します。"
 
 	_purge ${pkgs}
-
-
-	echo "PPAを削除します。"
 	_ppapurge ${ppa}
 
 
 fi
-
-
