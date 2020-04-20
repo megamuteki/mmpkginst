@@ -316,6 +316,12 @@ SRC
 CLIでYoutubeリンクから動画をダウンロードするスクリプト
 youtube-dlutilppa
 ---
+youtube-dl youtube GUI ダウンローダー
+BOTH
+SRC
+GUIでYoutubeリンクから動画をダウンロードするスクリプト
+youtube-dlguiutilppa
+---
 clipgrab  ビデオ ダウンローダー
 BOTH
 PPA

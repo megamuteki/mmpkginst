@@ -34,6 +34,12 @@ SRC
 ペンタブの描画先のモニタを変更するツール
 penmappenppa
 ---
+ptxconfペンタブマッピング 
+BOTH
+SRC
+ペンタブの描画先のモニタを変更する常駐ツール
+ptxconfpenppa
+---
 Kde-Config-Tablet ペンタブ設定ツール 
 NEON
 APT

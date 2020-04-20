@@ -22,7 +22,7 @@ elif [ "$1" == "-i" ] ; then
 	deb="mindmaster-7-amd64.deb"
 	
 
-	_log " https://www.edrawsoft.com/archives/${deb}をだうん"
+	_log " https://www.edrawsoft.com/archives/${deb}をダウンロードしました"
 	if wget -c https://www.edrawsoft.com/archives/${deb} ; then
 		_log "mindmasterのダウンロードに成功しました。"
 	else
