@@ -10,6 +10,12 @@ PPA
 輝度や色温度を変更するデュアルモニタ対応アプリ。
 brightnesscontrollerpenppa
 ---
+xinput_calibrator libinput  デュアルモニター用キャリブレータ
+BOTH
+SRC
+xinput_calibratorをデュアルモニタで使用する場合。
+xinputcalibratorpenppa
+---
 xppenex カーネルモジュール
 BOTH
 SRC
