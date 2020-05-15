@@ -25,13 +25,14 @@ elif [ "$1" == "-i" ] ; then
 
 	_install ${devpkgs}	
 	
-	_insatallvscode{
+	_insatallvscode(){
 		echo "マイクロソフトのpgpkeyを取得します"
-		wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+		curl -sSL https://packages.microsoft.com/keys/microsoft.asc -o microsoft.asc
+		sudo apt-key add microsoft.asc
 		
 		echo "マイクロソフトのリポジトリを追加します。"
-		sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
-	
+		echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"  | sudo tee /etc/apt/sources.list.d/vscode.list
+		sudo apt update
 	}	
 
 	_insatallvscode	
