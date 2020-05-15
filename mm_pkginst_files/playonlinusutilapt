@@ -26,11 +26,11 @@ _installpolmo ()
     svn checkout https://github.com/megamuteki/misc/trunk/wine/PlayOnLinux/POL
     cd /tmp/POL
 
-	if [ -e /usr/share/playonlinux/lang/locale/ja/LC_MESSAGES/pol.mo] ; then
+	if [ -e /usr/share/playonlinux/lang/locale/ja/LC_MESSAGES/pol.mo ] ; then
     	sudo mv /usr/share/playonlinux/lang/locale/ja/LC_MESSAGES/pol.mo  /usr/share/playonlinux/lang/locale/ja/LC_MESSAGES/pol.mo.bk
     	sudo cp pol.mo  /usr/share/playonlinux/lang/locale/ja/LC_MESSAGES/
-	elif [ -e /usr/share/locale/ja/LC_MESSAGES/pol.mo]  ; then
-	    sudo mv/usr/share/locale/ja/LC_MESSAGES/pol.mo  /usr/share/locale/ja/LC_MESSAGES/pol.mo,bk
+	elif [ -e /usr/share/locale/ja/LC_MESSAGES/pol.mo ]  ; then
+	    sudo mv /usr/share/locale/ja/LC_MESSAGES/pol.mo  /usr/share/locale/ja/LC_MESSAGES/pol.mo.bk
     	sudo cp pol.mo  /usr/share/locale/ja/LC_MESSAGES/pol.mo
 	fi
 	
