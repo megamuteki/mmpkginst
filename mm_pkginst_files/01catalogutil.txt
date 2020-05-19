@@ -16,6 +16,12 @@ PPA
 注意：コーデックは、アプリからの依存が多いので、よくわからない場合は、使用しないようにしてください。
 ldacutilppa
 ---
+PlusAudio用BlueToothライブラリ
+BOTH
+PPA
+PulseAudio用BlueToothライブラリ。
+bluetoothutilppa
+---
 ClamTkウイルススキャナ
 BOTH
 APT

@@ -198,9 +198,15 @@ xnconvertppa
 ---
 最新版converseen画像一括変換アプリ
 BOTH
-APT
+PPA
 画像を一括で変換するアプリ
 converseenppa
+---
+最新版Huginパノラマ写真作成アプリ
+BOTH
+PPA
+複数の写真でパノラマ写真を作成するアプリ
+huginppa
 ---
 最新版HandBrake動画変換アプリ
 BOTH
