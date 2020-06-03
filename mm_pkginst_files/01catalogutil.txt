@@ -244,6 +244,12 @@ PPA
 多機能で便利な画面キャプチャアプリ
 flameshotutilppa
 ---
+最新版ScanTailorAdvanced画像修正アプリ
+BOTH
+GIT
+多機能で便利な画面キャプチャアプリ
+scantailorutilppa
+---
 BootRepair起動修復アプリ
 BOTH
 PPA
