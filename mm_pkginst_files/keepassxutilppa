@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ppa="alex-p/notesalexp-bionic"
+ppa="phoerious/keepassxc"
 pkgs="keepassxc"
 
 datadir=$(cd $(dirname "$0") && pwd)
