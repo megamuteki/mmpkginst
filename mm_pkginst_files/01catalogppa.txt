@@ -364,6 +364,12 @@ DEB
 pdf編集用ツール
 pdfsamppa
 ---
+xournalpp電子ノートアプリ
+BOTH
+PPA
+タッチペンで授業のノートを取るエディタ
+xournalppppa
+---
 pdfarranger PDF 編集アプリ
 BOTH
 PPA
